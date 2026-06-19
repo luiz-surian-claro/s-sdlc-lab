@@ -13,7 +13,6 @@ clean assessment experience):
   - See /challenges/03_secure_code_review.md for instructions.
 """
 
-import os
 import sqlite3
 import subprocess
 import pickle
