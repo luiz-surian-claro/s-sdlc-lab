@@ -10,7 +10,7 @@ and vulnerability management.
 
 ## Repository Structure
 
-```
+```text
 s-sdlc-lab/
 ├── app/                        # Vulnerable Flask application
 │   ├── app.py                  # Application source code (contains intentional vulnerabilities)
@@ -49,7 +49,7 @@ DevSecOps competencies. Candidates are expected to complete all five
 challenges within the agreed time window.
 
 | # | Challenge | Key Skills |
-|---|-----------|-----------|
+| - | --------- | ---------- |
 | 1 | Fix Vulnerable Code | SAST triage, secure coding |
 | 2 | False Positive Validation | Analyst judgement, risk assessment |
 | 3 | Secure Code Review | Manual review, dependency analysis |
@@ -100,6 +100,7 @@ Work through each challenge in order. Instructions are in the `/challenges`
 directory.
 
 ### Challenge 1 — Fix Vulnerable Code
+
 📄 [`challenges/01_fix_vulnerabilities.md`](challenges/01_fix_vulnerabilities.md)
 
 Analyse SAST findings in `data/sast_results.json` and fix the corresponding
@@ -107,6 +108,7 @@ vulnerabilities in `app/app.py`. Covers: SQL injection, command injection,
 path traversal, insecure deserialisation, weak cryptography, hardcoded secrets.
 
 ### Challenge 2 — False Positive Validation
+
 📄 [`challenges/02_false_positive_validation.md`](challenges/02_false_positive_validation.md)
 
 Review the SCA results in `data/sca_results.json` and identify true positives,
@@ -114,18 +116,21 @@ false positives, and ambiguous findings. Justify each decision. Write a
 false-positive triage policy.
 
 ### Challenge 3 — Secure Code Review
+
 📄 [`challenges/03_secure_code_review.md`](challenges/03_secure_code_review.md)
 
 Perform a manual secure code review of `app/app.py` and `app/requirements.txt`.
 Document all findings and implement fixes.
 
 ### Challenge 4 — CI/CD Security
+
 📄 [`challenges/04_cicd_security.md`](challenges/04_cicd_security.md)
 
 Review `ci-cd/pipeline.yml` for security misconfigurations. Produce a hardened
 version and document your findings.
 
 ### Challenge 5 — JSON Parsing
+
 📄 [`challenges/05_json_parsing.md`](challenges/05_json_parsing.md)
 
 Complete `scripts/vulnerability_parser.py` to parse `data/mixed_scan_results.json`
@@ -138,7 +143,7 @@ and produce a normalised vulnerability report in CSV and/or Markdown.
 Submit the following as a pull request or zip archive:
 
 | File | Challenge |
-|------|-----------|
+| ---- | --------- |
 | `app/app.py` (fixed) | 1, 3 |
 | `challenge_01_findings.md` | 1 |
 | `challenge_02_false_positives.md` | 2 |
@@ -157,7 +162,7 @@ Submit the following as a pull request or zip archive:
 Candidates are assessed on:
 
 | Dimension | Description |
-|-----------|-------------|
+| --------- | ----------- |
 | **Technical depth** | Depth of vulnerability analysis beyond tool output |
 | **Accuracy** | Correctness of classifications and fixes |
 | **Reasoning** | Quality of justifications for decisions |
@@ -175,7 +180,7 @@ The vulnerabilities in this lab are based on the
 [OWASP Top 10 (2021)](https://owasp.org/Top10/):
 
 | OWASP Category | Covered In |
-|----------------|-----------|
+| -------------- | ---------- |
 | A01 — Broken Access Control | Path Traversal (app.py) |
 | A02 — Cryptographic Failures | MD5 password hashing (app.py) |
 | A03 — Injection | SQLi, XSS, Command Injection (app.py) |
@@ -189,7 +194,7 @@ The vulnerabilities in this lab are based on the
 ## Time Estimate
 
 | Challenge | Estimated Time |
-|-----------|---------------|
+| --------- | -------------- |
 | Challenge 1 | 45–60 min |
 | Challenge 2 | 30–45 min |
 | Challenge 3 | 60–90 min |
@@ -211,4 +216,4 @@ The vulnerabilities in this lab are based on the
 
 ---
 
-*Good luck! 🔐*
+Good luck! 🔐

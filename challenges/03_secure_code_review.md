@@ -22,7 +22,7 @@ Unlike automated scanners, a human reviewer can:
 ## Scope
 
 | File | In Scope |
-|------|----------|
+| ---- | -------- |
 | `app/app.py` | Yes — full review |
 | `app/requirements.txt` | Yes — dependency review |
 | `ci-cd/pipeline.yml` | No — covered in Challenge 4 |
@@ -37,7 +37,7 @@ Examine `app/app.py` line by line. For every security issue you find, create
 an entry in your report with the following fields:
 
 | Field | Description |
-|-------|-------------|
+| ----- | ----------- |
 | **ID** | Unique identifier (e.g. CR-001) |
 | **File** | File name and line number |
 | **Vulnerability** | Short name (e.g. "SQL Injection") |
@@ -93,7 +93,7 @@ least one threat per STRIDE category and propose a mitigation.
 ## Evaluation Criteria
 
 | Criterion | Weight |
-|-----------|--------|
+| --------- | ------ |
 | Number and accuracy of findings | 30 % |
 | Quality of impact analysis | 20 % |
 | Quality and completeness of fixes | 30 % |

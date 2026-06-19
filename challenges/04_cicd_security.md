@@ -45,7 +45,7 @@ Review `ci-cd/pipeline.yml` and list every misconfiguration you find.
 For each, provide:
 
 | Field | Description |
-|-------|-------------|
+| ----- | ----------- |
 | **ID** | Unique identifier (e.g. PL-001) |
 | **Location** | Job name and line number |
 | **Issue** | Short description |
@@ -109,7 +109,7 @@ Answer the following questions in your write-up:
 ## Evaluation Criteria
 
 | Criterion | Weight |
-|-----------|--------|
+| --------- | ------ |
 | Number and accuracy of misconfigurations identified | 30 % |
 | Quality and completeness of the hardened pipeline | 40 % |
 | Depth of answers to Task 4.3 | 30 % |

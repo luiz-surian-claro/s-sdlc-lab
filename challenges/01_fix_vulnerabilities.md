@@ -23,7 +23,7 @@ Review `data/sast_results.json` and complete the following table in your
 submission:
 
 | Finding ID | Rule | Severity | CWE | File | Line | Assessment (Real / FP) | Priority |
-|------------|------|----------|-----|------|------|------------------------|----------|
+| ---------- | ---- | -------- | --- | ---- | ---- | ---------------------- | -------- |
 | … | … | … | … | … | … | … | … |
 
 ### Task 1.2 — Fix the vulnerabilities
@@ -67,7 +67,7 @@ Minimum required fixes:
 ## Evaluation Criteria
 
 | Criterion | Weight |
-|-----------|--------|
+| --------- | ------ |
 | Correct identification of all vulnerabilities | 20 % |
 | Quality and completeness of fixes | 40 % |
 | Explanation of impact | 20 % |

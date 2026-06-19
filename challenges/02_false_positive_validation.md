@@ -26,7 +26,7 @@ The `data/sca_results.json` file contains a `false_positives_candidates`
 array with three entries:
 
 | ID | Package | Finding | Severity Reported |
-|----|---------|---------|-------------------|
+| -- | ------- | ------- | ----------------- |
 | FP-001 | Flask 2.0.1 | Debug mode symbols in binary scan | HIGH |
 | FP-002 | requests 2.25.0 | verify=False detected | CRITICAL |
 | AMBIGUOUS-001 | PyYAML 5.3.1 | yaml.load() without Loader | CRITICAL |
@@ -75,7 +75,7 @@ organisation. Include:
 ## Evaluation Criteria
 
 | Criterion | Weight |
-|-----------|--------|
+| --------- | ------ |
 | Correct classification of FP-001 and FP-002 (obvious FPs) | 20 % |
 | Nuanced analysis of AMBIGUOUS-001 | 25 % |
 | Additional FPs identified in mixed results | 25 % |

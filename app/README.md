@@ -22,7 +22,7 @@ The application will be available at `http://localhost:5000`.
 ## Endpoints
 
 | Method | Path           | Description                              |
-|--------|----------------|------------------------------------------|
+| ------ | -------------- | ---------------------------------------- |
 | GET    | `/`            | Health check                             |
 | POST   | `/login`       | Authenticate with username/password      |
 | GET    | `/search`      | Search users by username                 |

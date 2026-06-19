@@ -8,7 +8,7 @@ before the assessment is complete.
 ## Total Score: 100 points
 
 | Challenge | Max Points |
-|-----------|-----------|
+| --------- | ---------- |
 | Challenge 1 — Fix Vulnerable Code | 25 |
 | Challenge 2 — False Positive Validation | 20 |
 | Challenge 3 — Secure Code Review | 20 |
@@ -23,7 +23,7 @@ before the assessment is complete.
 ### 1.1 Vulnerability Identification (10 points)
 
 | Finding | Points |
-|---------|--------|
+| ------- | ------ |
 | SQL Injection (login) | 1.5 |
 | SQL Injection (register) | 1.5 |
 | OS Command Injection (ping) | 2 |
@@ -38,7 +38,7 @@ before the assessment is complete.
 ### 1.2 Quality of Fixes (10 points)
 
 | Fix | Points |
-|-----|--------|
+| --- | ------ |
 | Parameterised queries (both endpoints) | 2 |
 | shell=False + arg list for ping | 2 |
 | Secrets moved to env variables | 2 |
@@ -109,7 +109,7 @@ before the assessment is complete.
 **Expected minimum findings (8):**
 
 | Finding | Points |
-|---------|--------|
+| ------- | ------ |
 | SQL injection (login) | 1 |
 | SQL injection (register) | 1 |
 | XSS (search) | 1 |
@@ -144,12 +144,12 @@ Same as Challenge 1 — fixes evaluated holistically here if Challenge 1 was not
 **Expected misconfigurations (8+):**
 
 | Misconfiguration | Points |
-|-----------------|--------|
+| ---------------- | ------ |
 | Hardcoded SEMGREP_APP_TOKEN in env | 1.5 |
 | Hardcoded SNYK_TOKEN in env | 1.5 |
 | DEPLOY_KEY hardcoded in step env | 2 |
 | continue-on-error: true on SAST/SCA | 1.5 |
-| `|| true` suppresses test failures | 1 |
+| \|\| true suppresses test failures | 1 |
 | No permissions block (GITHUB_TOKEN over-permissioned) | 1 |
 | Trigger on all branches (`"*"`) | 0.5 |
 | No manual approval gate before production deploy | 1 |
@@ -179,7 +179,7 @@ Award up to 10 points.
 ### 5.1 Parser Implementation (10 points)
 
 | Component | Points |
-|-----------|--------|
+| --------- | ------ |
 | `extract_field()` — handles all variant field names and nested paths | 2 |
 | `normalise_severity()` — handles all raw formats without error | 2 |
 | `normalise_finding()` — all 14 findings normalised correctly | 3 |
@@ -204,19 +204,19 @@ Award up to 10 points.
 ## Scoring Bands
 
 | Score | Band | Interpretation |
-|-------|------|----------------|
+| ----- | ---- | -------------- |
 | 90–100 | **Exceptional** | Ready for senior role; demonstrates deep expertise |
-| 75–89  | **Strong** | Solid skills; minor gaps that can be closed quickly |
-| 60–74  | **Adequate** | Meets baseline requirements; needs mentoring in some areas |
-| 45–59  | **Developing** | Foundational knowledge present; significant skill gaps |
-| < 45   | **Below Threshold** | Not suitable for a Senior IT Security Analyst role at this time |
+| 75–89 | **Strong** | Solid skills; minor gaps that can be closed quickly |
+| 60–74 | **Adequate** | Meets baseline requirements; needs mentoring in some areas |
+| 45–59 | **Developing** | Foundational knowledge present; significant skill gaps |
+| < 45 | **Below Threshold** | Not suitable for a Senior IT Security Analyst role at this time |
 
 ---
 
 ## Bonus Points (up to 10 additional points)
 
 | Bonus | Points |
-|-------|--------|
+| ----- | ------ |
 | STRIDE threat model for `/login` (Challenge 3) | 3 |
 | `--filter-severity` CLI flag in parser (Challenge 5) | 1 |
 | Summary section in parser output (Challenge 5) | 1 |

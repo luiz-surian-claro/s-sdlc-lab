@@ -13,14 +13,14 @@ acceptable; the classification and normalised fields should match.
 ```markdown
 ## Vulnerability Report
 
-Generated: 2024-11-15  
-Input: data/mixed_scan_results.json  
+Generated: 2024-11-15
+Input: data/mixed_scan_results.json
 Total findings: 14 | True Positives: 10 | False Positives: 4
 
 ### Summary
 
 | Severity | Count (TP) |
-|----------|-----------|
+| -------- | ---------- |
 | critical | 2 |
 | high     | 4 |
 | medium   | 3 |
@@ -32,7 +32,7 @@ Total findings: 14 | True Positives: 10 | False Positives: 4
 ### Findings
 
 | ID | Tool | Severity | CWE | File | Line | Description | FP |
-|----|------|----------|-----|------|------|-------------|----|
+| -- | ---- | -------- | --- | ---- | ---- | ----------- | -- |
 | FINDING-001 | semgrep | high | CWE-89 | app/app.py | 74 | SQL injection via string formatting | No |
 | FINDING-002 | semgrep | high | CWE-78 | app/app.py | 112 | OS command injection via shell=True | No |
 | FINDING-003 | snyk | critical | CWE-20 | PyYAML (5.3.1) | N/A | Arbitrary Code Execution via yaml.load() | No |

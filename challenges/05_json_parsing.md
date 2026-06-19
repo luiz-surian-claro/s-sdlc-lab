@@ -28,7 +28,7 @@ The file is **intentionally inconsistent**. Field names, severity labels, and
 data structures vary across scanners. Examples:
 
 | Scanner A | Scanner B | Scanner C | Canonical Field |
-|-----------|-----------|-----------|-----------------|
+| --------- | --------- | --------- | --------------- |
 | `id` | `finding_id` | `ref` | `id` |
 | `source` | `tool` | `scanner` | `tool` |
 | `severity` | `Risk` | `level` | `severity` |
@@ -112,7 +112,7 @@ Your Markdown report should look similar to:
 
 ```markdown
 | ID | Tool | Severity | CWE | File | Line | Description | FP |
-|----|------|----------|-----|------|------|-------------|----|
+| -- | ---- | -------- | --- | ---- | ---- | ----------- | -- |
 | FINDING-001 | semgrep | high | CWE-89 | app/app.py | 74 | SQL injection via string formatting | No |
 | FINDING-002 | semgrep | high | CWE-78 | app/app.py | 112 | OS command injection via shell=True | No |
 | FINDING-008 | semgrep | info | N/A | app/app.py | 44 | FIXME comment found | Yes |
@@ -142,7 +142,7 @@ Your Markdown report should look similar to:
 ## Evaluation Criteria
 
 | Criterion | Weight |
-|-----------|--------|
+| --------- | ------ |
 | Correct normalisation of all 14 findings | 30 % |
 | Robustness (no crashes on malformed data) | 20 % |
 | Accuracy of false-positive classification | 25 % |
