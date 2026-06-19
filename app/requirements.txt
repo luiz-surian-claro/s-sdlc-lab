@@ -1,0 +1,15 @@
+# Vulnerable App — Python Dependencies
+#
+# TODO (CANDIDATE): Review these dependencies.
+# Are any of them outdated or known to be vulnerable?
+# Use a tool like `pip-audit` or `safety` to check.
+
+Flask==2.0.1
+Werkzeug==2.0.1
+Jinja2==3.0.1
+requests==2.25.0
+PyYAML==5.3.1
+SQLAlchemy==1.3.20
+cryptography==3.2
+Pillow==8.1.0
+lxml==4.6.2
