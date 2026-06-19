@@ -1,0 +1,222 @@
+{
+  "tool": "semgrep",
+  "version": "1.45.0",
+  "scan_date": "2024-11-15T10:30:00Z",
+  "repository": "s-sdlc-lab",
+  "results": [
+    {
+      "check_id": "python.lang.security.audit.sqli.flask-sqli",
+      "path": "app/app.py",
+      "start": { "line": 74, "col": 14 },
+      "end":   { "line": 74, "col": 80 },
+      "extra": {
+        "severity": "ERROR",
+        "message": "Detected possible SQL injection via string formatting. Use parameterised queries instead.",
+        "metadata": {
+          "cwe": ["CWE-89"],
+          "owasp": ["A03:2021 - Injection"],
+          "confidence": "HIGH"
+        },
+        "lines": "    query = f\"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'\""
+      }
+    },
+    {
+      "check_id": "python.lang.security.audit.sqli.flask-sqli",
+      "path": "app/app.py",
+      "start": { "line": 138, "col": 5 },
+      "end":   { "line": 138, "col": 85 },
+      "extra": {
+        "severity": "ERROR",
+        "message": "Detected possible SQL injection via string formatting in INSERT statement.",
+        "metadata": {
+          "cwe": ["CWE-89"],
+          "owasp": ["A03:2021 - Injection"],
+          "confidence": "HIGH"
+        },
+        "lines": "        f\"INSERT INTO users (username, password) VALUES ('{username}', '{password}')\""
+      }
+    },
+    {
+      "check_id": "python.flask.security.xss.reflected-xss",
+      "path": "app/app.py",
+      "start": { "line": 92, "col": 17 },
+      "end":   { "line": 98, "col": 6 },
+      "extra": {
+        "severity": "WARNING",
+        "message": "User-supplied data is rendered directly in an HTML template. This may allow reflected XSS.",
+        "metadata": {
+          "cwe": ["CWE-79"],
+          "owasp": ["A03:2021 - Injection"],
+          "confidence": "MEDIUM"
+        },
+        "lines": "    template = f\"\"\"\n    <html>\n      <body>\n        <h1>Search Results</h1>\n        <p>Results for: {username}</p>"
+      }
+    },
+    {
+      "check_id": "python.lang.security.audit.subprocess-shell-true",
+      "path": "app/app.py",
+      "start": { "line": 112, "col": 14 },
+      "end":   { "line": 112, "col": 75 },
+      "extra": {
+        "severity": "ERROR",
+        "message": "subprocess called with shell=True and user-controlled input. Possible OS command injection.",
+        "metadata": {
+          "cwe": ["CWE-78"],
+          "owasp": ["A03:2021 - Injection"],
+          "confidence": "HIGH"
+        },
+        "lines": "    result = subprocess.check_output(f\"ping -c 1 {host}\", shell=True, text=True)"
+      }
+    },
+    {
+      "check_id": "python.lang.security.audit.pickle.pickle-deserialization",
+      "path": "app/app.py",
+      "start": { "line": 126, "col": 11 },
+      "end":   { "line": 126, "col": 53 },
+      "extra": {
+        "severity": "ERROR",
+        "message": "Deserialization of untrusted data using pickle. Can lead to arbitrary code execution.",
+        "metadata": {
+          "cwe": ["CWE-502"],
+          "owasp": ["A08:2021 - Software and Data Integrity Failures"],
+          "confidence": "HIGH"
+        },
+        "lines": "    obj = pickle.loads(base64.b64decode(data))"
+      }
+    },
+    {
+      "check_id": "python.lang.security.audit.hardcoded-password",
+      "path": "app/app.py",
+      "start": { "line": 31, "col": 1 },
+      "end":   { "line": 31, "col": 34 },
+      "extra": {
+        "severity": "WARNING",
+        "message": "Hardcoded password detected in source code.",
+        "metadata": {
+          "cwe": ["CWE-798"],
+          "owasp": ["A07:2021 - Identification and Authentication Failures"],
+          "confidence": "HIGH"
+        },
+        "lines": "DB_PASSWORD = \"admin1234\""
+      }
+    },
+    {
+      "check_id": "python.lang.security.audit.hardcoded-token",
+      "path": "app/app.py",
+      "start": { "line": 32, "col": 1 },
+      "end":   { "line": 32, "col": 60 },
+      "extra": {
+        "severity": "WARNING",
+        "message": "Possible hardcoded API token detected.",
+        "metadata": {
+          "cwe": ["CWE-798"],
+          "owasp": ["A07:2021 - Identification and Authentication Failures"],
+          "confidence": "MEDIUM"
+        },
+        "lines": "API_TOKEN = \"ghp_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\""
+      }
+    },
+    {
+      "check_id": "python.lang.security.audit.path-traversal",
+      "path": "app/app.py",
+      "start": { "line": 121, "col": 9 },
+      "end":   { "line": 121, "col": 35 },
+      "extra": {
+        "severity": "ERROR",
+        "message": "File path constructed from user input without sanitisation. Possible path traversal.",
+        "metadata": {
+          "cwe": ["CWE-22"],
+          "owasp": ["A01:2021 - Broken Access Control"],
+          "confidence": "HIGH"
+        },
+        "lines": "    with open(filename, \"r\") as f:"
+      }
+    },
+    {
+      "check_id": "python.lang.security.audit.weak-crypto.use-of-md5",
+      "path": "app/app.py",
+      "start": { "line": 56, "col": 15 },
+      "end":   { "line": 56, "col": 45 },
+      "extra": {
+        "severity": "WARNING",
+        "message": "Use of MD5 hashing which is cryptographically weak. Use bcrypt or argon2 for passwords.",
+        "metadata": {
+          "cwe": ["CWE-327"],
+          "owasp": ["A02:2021 - Cryptographic Failures"],
+          "confidence": "HIGH"
+        },
+        "lines": "    hashed = hashlib.md5(b\"password123\").hexdigest()"
+      }
+    },
+    {
+      "check_id": "python.flask.debug-mode-enabled",
+      "path": "app/app.py",
+      "start": { "line": 36, "col": 1 },
+      "end":   { "line": 36, "col": 30 },
+      "extra": {
+        "severity": "INFO",
+        "message": "Flask DEBUG mode is enabled. This should never be enabled in production as it exposes an interactive debugger.",
+        "metadata": {
+          "cwe": ["CWE-94"],
+          "owasp": ["A05:2021 - Security Misconfiguration"],
+          "confidence": "HIGH"
+        },
+        "lines": "app.config[\"DEBUG\"] = True"
+      }
+    },
+    {
+      "check_id": "python.lang.correctness.return-in-init",
+      "path": "app/app.py",
+      "start": { "line": 44, "col": 1 },
+      "end":   { "line": 44, "col": 30 },
+      "extra": {
+        "severity": "INFO",
+        "message": "Function get_db_connection does not close the connection explicitly in all code paths.",
+        "metadata": {
+          "cwe": [],
+          "confidence": "LOW"
+        },
+        "lines": "def get_db_connection():"
+      }
+    },
+    {
+      "check_id": "generic.secrets.security.detected-generic-secret",
+      "path": "ci-cd/pipeline.yml",
+      "start": { "line": 22, "col": 7 },
+      "end":   { "line": 22, "col": 45 },
+      "extra": {
+        "severity": "WARNING",
+        "message": "A secret value appears to be hardcoded in the CI/CD pipeline configuration.",
+        "metadata": {
+          "cwe": ["CWE-798"],
+          "owasp": ["A07:2021 - Identification and Authentication Failures"],
+          "confidence": "MEDIUM"
+        },
+        "lines": "      SNYK_TOKEN: \"hardcoded-snyk-token-abc123\""
+      }
+    },
+    {
+      "check_id": "python.lang.correctness.comments.fixme",
+      "path": "app/app.py",
+      "start": { "line": 100, "col": 1 },
+      "end":   { "line": 100, "col": 20 },
+      "extra": {
+        "severity": "INFO",
+        "message": "FIXME comment found in source code. Resolve before merging.",
+        "metadata": {
+          "cwe": [],
+          "confidence": "LOW"
+        },
+        "lines": "    # FIXME: handle errors"
+      }
+    }
+  ],
+  "stats": {
+    "total": 13,
+    "by_severity": {
+      "ERROR": 5,
+      "WARNING": 5,
+      "INFO": 3
+    }
+  }
+}

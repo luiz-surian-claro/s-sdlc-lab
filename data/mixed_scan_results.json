@@ -1,0 +1,151 @@
+{
+  "_meta": {
+    "description": "Mixed vulnerability dataset for JSON parsing challenge. Fields are intentionally inconsistent to test parser robustness.",
+    "instructions": "CANDIDATE — Parse this file and produce a normalised report. Fields may be missing, have different names, or carry unexpected types. Your parser must handle all cases gracefully.",
+    "expected_output_fields": ["id", "tool", "severity", "cwe", "file", "line", "description", "false_positive"]
+  },
+  "findings": [
+    {
+      "id": "FINDING-001",
+      "source": "semgrep",
+      "severity": "ERROR",
+      "cwe": "CWE-89",
+      "file": "app/app.py",
+      "line": 74,
+      "message": "SQL injection via string formatting"
+    },
+    {
+      "finding_id": "FINDING-002",
+      "tool": "semgrep",
+      "Risk": "HIGH",
+      "cwe_id": "CWE-78",
+      "filepath": "app/app.py",
+      "line_number": 112,
+      "description": "OS command injection via shell=True"
+    },
+    {
+      "id": "FINDING-003",
+      "source": "snyk",
+      "severity": "critical",
+      "cve": "CVE-2020-14343",
+      "cwe": "CWE-20",
+      "package": "PyYAML",
+      "installed_version": "5.3.1",
+      "fixed_version": "5.4",
+      "summary": "Arbitrary Code Execution via yaml.load()"
+    },
+    {
+      "ref": "FINDING-004",
+      "scanner": "semgrep",
+      "level": "warning",
+      "cwe": "CWE-502",
+      "location": {
+        "path": "app/app.py",
+        "start_line": 126
+      },
+      "details": "Insecure deserialisation using pickle"
+    },
+    {
+      "id": "FINDING-005",
+      "source": "snyk",
+      "severity": "HIGH",
+      "CVE": "CVE-2021-28957",
+      "cwe": ["CWE-79"],
+      "package_name": "lxml",
+      "version": "4.6.2",
+      "description": "XSS via lxml clean module"
+    },
+    {
+      "id": "FINDING-006",
+      "tool": "trivy",
+      "Severity": "MEDIUM",
+      "vulnerabilityID": "CVE-2023-32681",
+      "pkgName": "requests",
+      "installedVersion": "2.25.0",
+      "fixedVersion": "2.31.0",
+      "Title": "Proxy-Authorization header forwarded to destination"
+    },
+    {
+      "id": "FINDING-007",
+      "source": "semgrep",
+      "severity": "WARNING",
+      "cwe": "CWE-798",
+      "file": "app/app.py",
+      "line": 32,
+      "message": "Hardcoded API token detected",
+      "false_positive": false
+    },
+    {
+      "id": "FINDING-008",
+      "source": "semgrep",
+      "severity": "INFO",
+      "cwe": null,
+      "file": "app/app.py",
+      "line": 44,
+      "message": "FIXME comment found — resolve before merging",
+      "fp_candidate": true,
+      "analyst_note": "Low-value informational finding. Typically filtered from security reports."
+    },
+    {
+      "finding_id": "FINDING-009",
+      "scanner": "snyk",
+      "risk_level": "CRITICAL",
+      "cwe": "CWE-400",
+      "package": "Werkzeug",
+      "version_installed": "2.0.1",
+      "fix_available_in": "3.0.6",
+      "title": "Resource exhaustion via crafted multipart form data"
+    },
+    {
+      "id": "FINDING-010",
+      "source": "owasp-dep-check",
+      "severity": "low",
+      "cve": null,
+      "cwe": "CWE-20",
+      "component": "Flask",
+      "component_version": "2.0.1",
+      "evidence": "Open redirect in specific configurations",
+      "fp_candidate": true,
+      "analyst_note": "CANDIDATE: The scanner matched 'debug' strings in Flask's own test fixtures. Evaluate whether this represents a genuine risk."
+    },
+    {
+      "id": "FINDING-011",
+      "tool": "semgrep",
+      "severity": "INFO",
+      "cwe": "CWE-94",
+      "filepath": "app/app.py",
+      "line_number": 36,
+      "message": "Flask DEBUG mode enabled in source code",
+      "false_positive": false
+    },
+    {
+      "id": "FINDING-012",
+      "source": "gitleaks",
+      "severity": "HIGH",
+      "secret_type": "github_pat",
+      "file": "app/app.py",
+      "line": 32,
+      "description": "GitHub Personal Access Token detected in source code",
+      "false_positive": false
+    },
+    {
+      "id": "FINDING-013",
+      "source": "snyk",
+      "severity": "critical",
+      "cve": "CVE-2024-49767",
+      "cwe": "CWE-400",
+      "package": "Werkzeug",
+      "version": "2.0.1",
+      "description": "Duplicate of FINDING-009 via different scanner — intentional for dedup testing"
+    },
+    {
+      "id": "FINDING-014",
+      "source": "semgrep",
+      "severity": "ERROR",
+      "cwe": "CWE-22",
+      "file": "app/app.py",
+      "line": 121,
+      "message": "Path traversal — open() called with unsanitised user input"
+    }
+  ]
+}

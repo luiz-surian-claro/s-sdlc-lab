@@ -1,0 +1,158 @@
+# DevSecOps Security Playground — CI/CD Pipeline
+# -----------------------------------------------
+# TODO (CANDIDATE): Review this pipeline configuration.
+# Identify all security misconfigurations and propose fixes.
+# Refer to /challenges/04_cicd_security.md for full instructions.
+
+name: Vulnerable CI Pipeline
+
+on:
+  push:
+    branches: ["*"]   # TODO (CANDIDATE): Is triggering on all branches appropriate?
+  pull_request:
+    branches: ["*"]
+
+# MISCONFIGURATION: No top-level permissions block — jobs inherit GITHUB_TOKEN
+# with write permissions to all scopes by default.
+
+jobs:
+  # ------------------------------------------------------------------
+  # Stage 1 — Build & Test
+  # ------------------------------------------------------------------
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r app/requirements.txt
+
+      # MISCONFIGURATION: Dependency installation without integrity checking
+      # (no requirements hash pinning, no --require-hashes flag)
+
+      - name: Run unit tests
+        run: |
+          cd app
+          python -m pytest tests/ || true
+        # MISCONFIGURATION: '|| true' suppresses test failures — pipeline
+        # continues even when tests fail.
+
+  # ------------------------------------------------------------------
+  # Stage 2 — SAST (Static Application Security Testing)
+  # ------------------------------------------------------------------
+  sast:
+    name: SAST — Semgrep
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      # MISCONFIGURATION: Secret hardcoded as environment variable value
+      SEMGREP_APP_TOKEN: "hardcoded-semgrep-token-abc123"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: "p/python"
+        # MISCONFIGURATION: No failure threshold set — findings do not fail
+        # the pipeline regardless of severity.
+        continue-on-error: true
+
+      - name: Upload SAST results
+        uses: actions/upload-artifact@v3
+        with:
+          name: semgrep-results
+          path: semgrep.sarif
+        if: always()
+
+  # ------------------------------------------------------------------
+  # Stage 3 — SCA (Software Composition Analysis)
+  # ------------------------------------------------------------------
+  sca:
+    name: SCA — Snyk
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Snyk
+        uses: snyk/actions/python@master
+        env:
+          # MISCONFIGURATION: Token read from a hardcoded env variable instead
+          # of a repository secret.
+          SNYK_TOKEN: "hardcoded-snyk-token-abc123"
+        with:
+          args: --severity-threshold=low
+        # MISCONFIGURATION: 'continue-on-error: true' — vulnerabilities never
+        # block the pipeline.
+        continue-on-error: true
+
+  # ------------------------------------------------------------------
+  # Stage 4 — DAST (Dynamic Application Security Testing)  [Mock]
+  # ------------------------------------------------------------------
+  dast:
+    name: DAST — OWASP ZAP (Mock)
+    runs-on: ubuntu-latest
+    needs: [sast, sca]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Start application
+        run: |
+          pip install -r app/requirements.txt
+          python app/app.py &
+          sleep 5
+        # MISCONFIGURATION: App is started on a public runner with debug=True
+        # and bound to 0.0.0.0 (set in app.py).
+
+      - name: Run ZAP baseline scan
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: "http://localhost:5000"
+          # MISCONFIGURATION: No fail_action configured — alerts never block
+          # the pipeline.
+          fail_action: false
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: report_html.html
+        if: always()
+
+  # ------------------------------------------------------------------
+  # Stage 5 — Deploy  (no security gates)
+  # ------------------------------------------------------------------
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [sast, sca, dast]
+    # MISCONFIGURATION: No environment protection rules, no required reviewers,
+    # and no manual approval gate before deploying to production.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy application
+        env:
+          # MISCONFIGURATION: Production credentials embedded directly in the
+          # workflow instead of using GitHub Secrets.
+          DATABASE_URL: "******prod-db.example.com/appdb"
+          DEPLOY_KEY: "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA..."
+        run: |
+          echo "Deploying to production..."
+          # deploy script would go here
+          echo "Deployed!"
+
+      # MISCONFIGURATION: No post-deployment security verification step
+      # (e.g., smoke test, re-run DAST against production URL).
