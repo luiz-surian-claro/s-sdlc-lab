@@ -1,122 +1,123 @@
-# Challenge 4 — CI/CD Security Pipeline Improvement
+# Desafio 4 — Melhoria de Segurança no Pipeline CI/CD
 
-## Objective
+## Objetivo
 
-Review the GitHub Actions pipeline in `ci-cd/pipeline.yml`, identify all
-security misconfigurations, and propose (and implement) a hardened version.
-
----
-
-## Background
-
-CI/CD pipelines are a critical attack surface in modern DevSecOps environments.
-Misconfigured pipelines can:
-
-- Leak secrets to build logs or third-party services
-- Allow supply-chain attacks via unpinned actions
-- Execute malicious code injected via pull requests
-- Deploy vulnerable or untested code to production
+Revise o pipeline do GitHub Actions em `ci-cd/pipeline.yml`, identifique todas
+as configurações incorretas de segurança e proponha (e implemente) uma versão
+com hardening.
 
 ---
 
-## Findings to Look For
+## Contexto
 
-The pipeline in `ci-cd/pipeline.yml` contains at least **eight** intentional
-misconfigurations. Your task is to find them all.
+Pipelines CI/CD são uma superfície de ataque crítica em ambientes DevSecOps modernos.
+Pipelines mal configurados podem:
 
-Hint categories (not ordered):
-
-- Secrets handling
-- Permissions
-- Security gate logic
-- Trigger configuration
-- Action pinning
-- Error suppression
-- Environment isolation
-- Deployment controls
+- Vazar segredos para logs de build ou serviços de terceiros
+- Permitir ataques à cadeia de suprimentos via actions não fixadas
+- Executar código malicioso injetado via pull requests
+- Implantar código vulnerável ou não testado em produção
 
 ---
 
-## Your Tasks
+## Achados a Procurar
 
-### Task 4.1 — Enumerate Misconfigurations
+O pipeline em `ci-cd/pipeline.yml` contém pelo menos **oito** configurações
+incorretas intencionais. Sua tarefa é encontrá-las todas.
 
-Review `ci-cd/pipeline.yml` and list every misconfiguration you find.
-For each, provide:
+Categorias de dicas (sem ordem):
 
-| Field | Description |
-| ----- | ----------- |
-| **ID** | Unique identifier (e.g. PL-001) |
-| **Location** | Job name and line number |
-| **Issue** | Short description |
-| **Risk** | What could an attacker do? |
-| **Severity** | Critical / High / Medium / Low |
-| **Fix** | Proposed remediation |
+- Gerenciamento de segredos
+- Permissões
+- Lógica de gate de segurança
+- Configuração de trigger
+- Fixação de actions
+- Supressão de erros
+- Isolamento de ambiente
+- Controles de implantação
 
-**Minimum: identify at least 6 distinct misconfigurations.**
+---
 
-### Task 4.2 — Implement a Hardened Pipeline
+## Suas Tarefas
 
-Create `ci-cd/pipeline_hardened.yml` — a corrected version of the pipeline.
+### Tarefa 4.1 — Enumerar as Configurações Incorretas
 
-Your hardened pipeline **must**:
+Revise `ci-cd/pipeline.yml` e liste cada configuração incorreta encontrada.
+Para cada uma, forneça:
 
-1. **Pin all actions** to a specific commit SHA (not just a tag) to prevent
-   supply-chain attacks.
+| Campo | Descrição |
+| ----- | --------- |
+| **ID** | Identificador único (ex.: PL-001) |
+| **Localização** | Nome do job e número da linha |
+| **Problema** | Descrição curta |
+| **Risco** | O que um atacante poderia fazer? |
+| **Severidade** | Crítica / Alta / Média / Baixa |
+| **Correção** | Remediação proposta |
 
-2. **Use GitHub Secrets** for all tokens (`SEMGREP_APP_TOKEN`, `SNYK_TOKEN`,
+**Mínimo: identifique pelo menos 6 configurações incorretas distintas.**
+
+### Tarefa 4.2 — Implementar um Pipeline com Hardening
+
+Crie `ci-cd/pipeline_hardened.yml` — uma versão corrigida do pipeline.
+
+Seu pipeline com hardening **deve**:
+
+1. **Fixar todas as actions** a um SHA de commit específico (não apenas uma tag)
+   para prevenir ataques à cadeia de suprimentos.
+
+2. **Usar GitHub Secrets** para todos os tokens (`SEMGREP_APP_TOKEN`, `SNYK_TOKEN`,
    `DEPLOY_KEY`, etc.).
 
-3. **Set least-privilege permissions** using the `permissions` block at the
-   top level and/or per job.
+3. **Definir permissões com menor privilégio** usando o bloco `permissions`
+   no nível superior e/ou por job.
 
-4. **Fail the pipeline** when SAST or SCA tools detect findings above a
-   configurable severity threshold (do not use `continue-on-error: true`).
+4. **Falhar o pipeline** quando ferramentas SAST ou SCA detectarem achados
+   acima de um limiar de severidade configurável (não use `continue-on-error: true`).
 
-5. **Require manual approval** before deploying to production using GitHub
-   Environments with protection rules.
+5. **Exigir aprovação manual** antes de implantar em produção usando GitHub
+   Environments com regras de proteção.
 
-6. **Remove error suppression** (`|| true`) from test commands.
+6. **Remover supressão de erros** (`|| true`) dos comandos de teste.
 
-7. **Scope the trigger** to only relevant branches (e.g., `main`, `develop`,
+7. **Limitar o trigger** apenas a branches relevantes (ex.: `main`, `develop`,
    `release/**`).
 
-8. **Add a dependency integrity check** (e.g., `pip install --require-hashes`
-   or a lock file).
+8. **Adicionar verificação de integridade de dependências** (ex.: `pip install --require-hashes`
+   ou um arquivo de lock).
 
-### Task 4.3 — Security Gate Design (Discussion)
+### Tarefa 4.3 — Design de Gates de Segurança (Discussão)
 
-Answer the following questions in your write-up:
+Responda às seguintes perguntas no seu relatório:
 
-1. At what point in the pipeline should SAST results block a merge?
-   What severity threshold would you choose, and why?
+1. Em que ponto do pipeline os resultados de SAST devem bloquear um merge?
+   Qual limiar de severidade você escolheria, e por quê?
 
-2. How would you handle a situation where a critical CVE is found in a
-   transitive dependency that has no available fix?
+2. Como você lidaria com uma situação em que uma CVE crítica é encontrada em
+   uma dependência transitiva sem correção disponível?
 
-3. What additional security gates would you add to this pipeline beyond
-   SAST, SCA, and DAST?
-
----
-
-## Deliverables
-
-- `ci-cd/pipeline_hardened.yml` — corrected pipeline
-- `challenge_04_cicd.md` — findings table and answers to Task 4.3
+3. Quais gates de segurança adicionais você adicionaria a este pipeline além
+   de SAST, SCA e DAST?
 
 ---
 
-## Evaluation Criteria
+## Entregáveis
 
-| Criterion | Weight |
-| --------- | ------ |
-| Number and accuracy of misconfigurations identified | 30 % |
-| Quality and completeness of the hardened pipeline | 40 % |
-| Depth of answers to Task 4.3 | 30 % |
+- `ci-cd/pipeline_hardened.yml` — pipeline corrigido
+- `challenge_04_cicd.md` — tabela de achados e respostas à Tarefa 4.3
 
 ---
 
-## References
+## Critérios de Avaliação
+
+| Critério | Peso |
+| -------- | ---- |
+| Número e precisão das configurações incorretas identificadas | 30% |
+| Qualidade e completude do pipeline com hardening | 40% |
+| Profundidade das respostas à Tarefa 4.3 | 30% |
+
+---
+
+## Referências
 
 - [GitHub Actions Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
 - [OWASP CI/CD Security Top 10](https://owasp.org/www-project-top-10-ci-cd-security-risks/)

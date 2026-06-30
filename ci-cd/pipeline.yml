@@ -1,26 +1,26 @@
-# DevSecOps Security Playground — CI/CD Pipeline
+# Playground de Segurança DevSecOps — Pipeline CI/CD
 # -----------------------------------------------
-# TODO (CANDIDATE): Review this pipeline configuration.
-# Identify all security misconfigurations and propose fixes.
-# Refer to /challenges/04_cicd_security.md for full instructions.
+# TODO (CANDIDATO): Revise esta configuração de pipeline.
+# Identifique todas as configurações incorretas de segurança e proponha correções.
+# Consulte /challenges/04_cicd_security.md para as instruções completas.
 
-name: Vulnerable CI Pipeline
+name: Pipeline CI Vulnerável
 
 on:
   push:
-    branches: ["*"]   # TODO (CANDIDATE): Is triggering on all branches appropriate?
+    branches: ["*"]   # TODO (CANDIDATO): Fazer trigger em todas as branches é apropriado?
   pull_request:
     branches: ["*"]
 
-# MISCONFIGURATION: No top-level permissions block — jobs inherit GITHUB_TOKEN
-# with write permissions to all scopes by default.
+# CONFIGURAÇÃO INCORRETA: Sem bloco de permissões no nível superior — os jobs herdam GITHUB_TOKEN
+# com permissões de escrita para todos os escopos por padrão.
 
 jobs:
   # ------------------------------------------------------------------
-  # Stage 1 — Build & Test
+  # Estágio 1 — Build e Testes
   # ------------------------------------------------------------------
   build:
-    name: Build and Test
+    name: Build e Testes
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -34,25 +34,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r app/requirements.txt
 
-      # MISCONFIGURATION: Dependency installation without integrity checking
-      # (no requirements hash pinning, no --require-hashes flag)
+      # CONFIGURAÇÃO INCORRETA: Instalação de dependências sem verificação de integridade
+      # (sem hash pinning em requirements, sem flag --require-hashes)
 
-      - name: Run unit tests
+      - name: Executar testes unitários
         run: |
           cd app
           python -m pytest tests/ || true
-        # MISCONFIGURATION: '|| true' suppresses test failures — pipeline
-        # continues even when tests fail.
+        # CONFIGURAÇÃO INCORRETA: '|| true' suprime falhas nos testes — o pipeline
+        # continua mesmo quando os testes falham.
 
   # ------------------------------------------------------------------
-  # Stage 2 — SAST (Static Application Security Testing)
+  # Estágio 2 — SAST (Teste de Segurança de Aplicação Estático)
   # ------------------------------------------------------------------
   sast:
     name: SAST — Semgrep
     runs-on: ubuntu-latest
     needs: build
     env:
-      # MISCONFIGURATION: Secret hardcoded as environment variable value
+      # CONFIGURAÇÃO INCORRETA: Segredo hardcoded como valor de variável de ambiente
       SEMGREP_APP_TOKEN: "hardcoded-semgrep-token-abc123"
     steps:
       - name: Checkout code
@@ -62,8 +62,8 @@ jobs:
         uses: semgrep/semgrep-action@v1
         with:
           config: "p/python"
-        # MISCONFIGURATION: No failure threshold set — findings do not fail
-        # the pipeline regardless of severity.
+        # CONFIGURAÇÃO INCORRETA: Sem limiar de falha definido — os achados não fazem
+        # o pipeline falhar independentemente da severidade.
         continue-on-error: true
 
       - name: Upload SAST results
@@ -74,7 +74,7 @@ jobs:
         if: always()
 
   # ------------------------------------------------------------------
-  # Stage 3 — SCA (Software Composition Analysis)
+  # Estágio 3 — SCA (Análise de Composição de Software)
   # ------------------------------------------------------------------
   sca:
     name: SCA — Snyk
@@ -87,20 +87,20 @@ jobs:
       - name: Run Snyk
         uses: snyk/actions/python@master
         env:
-          # MISCONFIGURATION: Token read from a hardcoded env variable instead
-          # of a repository secret.
+          # CONFIGURAÇÃO INCORRETA: Token lido de variável de ambiente hardcoded em vez
+          # de um secret do repositório.
           SNYK_TOKEN: "hardcoded-snyk-token-abc123"
         with:
           args: --severity-threshold=low
-        # MISCONFIGURATION: 'continue-on-error: true' — vulnerabilities never
-        # block the pipeline.
+        # CONFIGURAÇÃO INCORRETA: 'continue-on-error: true' — vulnerabilidades nunca
+        # bloqueiam o pipeline.
         continue-on-error: true
 
   # ------------------------------------------------------------------
-  # Stage 4 — DAST (Dynamic Application Security Testing)  [Mock]
+  # Estágio 4 — DAST (Teste de Segurança de Aplicação Dinâmico) [Simulado]
   # ------------------------------------------------------------------
   dast:
-    name: DAST — OWASP ZAP (Mock)
+    name: DAST — OWASP ZAP (Simulado)
     runs-on: ubuntu-latest
     needs: [sast, sca]
     steps:
@@ -112,15 +112,15 @@ jobs:
           pip install -r app/requirements.txt
           python app/app.py &
           sleep 5
-        # MISCONFIGURATION: App is started on a public runner with debug=True
-        # and bound to 0.0.0.0 (set in app.py).
+        # CONFIGURAÇÃO INCORRETA: App iniciada em um runner público com debug=True
+        # e binding em 0.0.0.0 (definido em app.py).
 
       - name: Run ZAP baseline scan
         uses: zaproxy/action-baseline@v0.10.0
         with:
           target: "http://localhost:5000"
-          # MISCONFIGURATION: No fail_action configured — alerts never block
-          # the pipeline.
+          # CONFIGURAÇÃO INCORRETA: Sem fail_action configurado — alertas nunca
+          # bloqueiam o pipeline.
           fail_action: false
 
       - name: Upload ZAP report
@@ -131,28 +131,28 @@ jobs:
         if: always()
 
   # ------------------------------------------------------------------
-  # Stage 5 — Deploy  (no security gates)
+  # Estágio 5 — Deploy  (sem gates de segurança)
   # ------------------------------------------------------------------
   deploy:
-    name: Deploy to Production
+    name: Deploy para Produção
     runs-on: ubuntu-latest
     needs: [sast, sca, dast]
-    # MISCONFIGURATION: No environment protection rules, no required reviewers,
-    # and no manual approval gate before deploying to production.
+    # CONFIGURAÇÃO INCORRETA: Sem regras de proteção de ambiente, sem revisores obrigatórios
+    # e sem gate de aprovação manual antes do deploy em produção.
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Deploy application
         env:
-          # MISCONFIGURATION: Production credentials embedded directly in the
-          # workflow instead of using GitHub Secrets.
+          # CONFIGURAÇÃO INCORRETA: Credenciais de produção embutidas diretamente no
+          # workflow em vez de usar GitHub Secrets.
           DATABASE_URL: "******prod-db.example.com/appdb"
           DEPLOY_KEY: "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA..."
         run: |
-          echo "Deploying to production..."
-          # deploy script would go here
-          echo "Deployed!"
+          echo "Fazendo deploy em produção..."
+          # script de deploy seria inserido aqui
+          echo "Deploy concluído!"
 
-      # MISCONFIGURATION: No post-deployment security verification step
-      # (e.g., smoke test, re-run DAST against production URL).
+      # CONFIGURAÇÃO INCORRETA: Sem etapa de verificação pós-deploy
+      # (ex.: smoke test, re-execução do DAST contra a URL de produção).

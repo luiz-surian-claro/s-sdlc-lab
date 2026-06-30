@@ -1,236 +1,233 @@
-# Scoring Rubric — DevSecOps Security Playground
+# Rubrica de Pontuação — Playground de Segurança DevSecOps
 
-This rubric is intended for the **evaluator**. Do not share with candidates
-before the assessment is complete.
+Esta rubrica é destinada ao **avaliador**. Não compartilhe com os candidatos
+antes que a avaliação seja concluída.
 
 ---
 
-## Total Score: 100 points
+## Pontuação Total: 100 pontos
 
-| Challenge | Max Points |
-| --------- | ---------- |
-| Challenge 1 — Fix Vulnerable Code | 25 |
-| Challenge 2 — False Positive Validation | 20 |
-| Challenge 3 — Secure Code Review | 20 |
-| Challenge 4 — CI/CD Security | 20 |
-| Challenge 5 — JSON Parsing | 15 |
+| Desafio | Pontuação Máxima |
+| ------- | ---------------- |
+| Desafio 1 — Corrigir Código Vulnerável | 25 |
+| Desafio 2 — Validação de Falsos Positivos | 20 |
+| Desafio 3 — Revisão de Código Seguro | 20 |
+| Desafio 4 — Segurança em CI/CD | 20 |
+| Desafio 5 — Parsing de JSON | 15 |
 | **Total** | **100** |
 
 ---
 
-## Challenge 1 — Fix Vulnerable Code (25 points)
+## Desafio 1 — Corrigir Código Vulnerável (25 pontos)
 
-### 1.1 Vulnerability Identification (10 points)
+### 1.1 Identificação de Vulnerabilidades (10 pontos)
 
-| Finding | Points |
-| ------- | ------ |
-| SQL Injection (login) | 1.5 |
-| SQL Injection (register) | 1.5 |
-| OS Command Injection (ping) | 2 |
-| Hardcoded API token | 1 |
-| Hardcoded DB password | 1 |
-| Path Traversal (file) | 1.5 |
-| Insecure deserialisation (pickle) | 1 |
-| Weak crypto (MD5 passwords) | 1 |
-| Debug mode enabled + 0.0.0.0 binding | 0.5 |
-| **Subtotal** | **11** *(award up to 10 max)* |
+| Achado | Pontos |
+| ------ | ------ |
+| Injeção de SQL (login) | 1,5 |
+| Injeção de SQL (register) | 1,5 |
+| Injeção de Comando no SO (ping) | 2 |
+| Token de API hardcoded | 1 |
+| Senha de banco hardcoded | 1 |
+| Path Traversal (file) | 1,5 |
+| Desserialização insegura (pickle) | 1 |
+| Criptografia fraca (MD5 para senhas) | 1 |
+| Modo debug habilitado + binding 0.0.0.0 | 0,5 |
+| **Subtotal** | **11** *(conceder no máximo 10)* |
 
-### 1.2 Quality of Fixes (10 points)
+### 1.2 Qualidade das Correções (10 pontos)
 
-| Fix | Points |
-| --- | ------ |
-| Parameterised queries (both endpoints) | 2 |
-| shell=False + arg list for ping | 2 |
-| Secrets moved to env variables | 2 |
-| Path sanitisation (os.path.realpath + prefix check) | 2 |
-| pickle replaced with safe alternative | 1 |
-| MD5 replaced with bcrypt/argon2 | 1 |
+| Correção | Pontos |
+| -------- | ------ |
+| Queries parametrizadas (ambos os endpoints) | 2 |
+| shell=False + lista de argumentos para ping | 2 |
+| Segredos movidos para variáveis de ambiente | 2 |
+| Sanitização de caminho (os.path.realpath + verificação de prefixo) | 2 |
+| pickle substituído por alternativa segura | 1 |
+| MD5 substituído por bcrypt/argon2 | 1 |
 
-### 1.3 Write-up Quality (5 points)
+### 1.3 Qualidade do Relatório (5 pontos)
 
-- **5**: All findings documented with CWE, impact, and clear remediation
-- **3–4**: Most findings documented; minor gaps
-- **1–2**: Partial documentation; missing impact analysis
-- **0**: No write-up submitted
-
----
-
-## Challenge 2 — False Positive Validation (20 points)
-
-### 2.1 FP-001 Classification (4 points)
-
-**Expected answer**: False Positive
-
-- **4**: Correctly classified as FP with clear technical justification (scanner matched debug symbols in library binary, not user code)
-- **2–3**: Correct classification, weak justification
-- **1**: Incorrect classification with partial understanding
-- **0**: Incorrect classification, no justification
-
-### 2.2 FP-002 Classification (4 points)
-
-**Expected answer**: False Positive
-
-- **4**: Correctly classified as FP; identified that the match was in the library's test suite, not application code
-- **2–3**: Correct classification, weak justification
-- **1**: Incorrect classification with partial understanding
-- **0**: Incorrect with no justification
-
-### 2.3 AMBIGUOUS-001 Classification (6 points)
-
-**Expected answer**: Ambiguous — technically a FP (dead code), but should be flagged for remediation
-
-- **6**: Recognises the nuance — the yaml.load() call is in dead code so it is not directly exploitable, but the dead code should be removed; recommends clean-up rather than accept/ignore
-- **4–5**: Identifies ambiguity; recommends action
-- **2–3**: Classified as one extreme (clear TP or clear FP) with reasonable but incomplete reasoning
-- **0–1**: Misclassified with poor justification
-
-### 2.4 Additional FPs from mixed_scan_results.json (3 points)
-
-**Expected FPs**: FINDING-008 (FIXME comment — INFO, no security impact), FINDING-010 (debug string in Flask test fixtures), FINDING-013 (duplicate of FINDING-009)
-
-- **3**: Identifies at least 2 additional FPs with justification
-- **2**: Identifies 1 additional FP with justification
-- **1**: Attempts identification but with weak reasoning
-- **0**: None identified
-
-### 2.5 False-Positive Policy (3 points)
-
-- **3**: Policy includes criteria, evidence requirements, approval process, and review cadence
-- **2**: Policy covers most elements; missing one
-- **1**: Partial policy; missing two or more elements
-- **0**: No policy submitted
+- **5**: Todos os achados documentados com CWE, impacto e remediação clara
+- **3–4**: Maioria dos achados documentada; lacunas menores
+- **1–2**: Documentação parcial; análise de impacto ausente
+- **0**: Nenhum relatório submetido
 
 ---
 
-## Challenge 3 — Secure Code Review (20 points)
+## Desafio 2 — Validação de Falsos Positivos (20 pontos)
 
-### 3.1 Findings Report (10 points)
+### 2.1 Classificação de FP-001 (4 pontos)
 
-**Expected minimum findings (8):**
+**Resposta esperada**: Falso Positivo
 
-| Finding | Points |
-| ------- | ------ |
-| SQL injection (login) | 1 |
-| SQL injection (register) | 1 |
+- **4**: Corretamente classificado como FP com justificativa técnica clara (o scanner detectou símbolos de debug no binário da biblioteca, não no código do usuário)
+- **2–3**: Classificação correta, justificativa fraca
+- **1**: Classificação incorreta com entendimento parcial
+- **0**: Classificação incorreta, sem justificativa
+
+### 2.2 Classificação de FP-002 (4 pontos)
+
+**Resposta esperada**: Falso Positivo
+
+- **4**: Corretamente classificado como FP; identificou que o match foi na suíte de testes da biblioteca, não no código da aplicação
+- **2–3**: Classificação correta, justificativa fraca
+- **1**: Classificação incorreta com entendimento parcial
+- **0**: Incorreto sem justificativa
+
+### 2.3 Classificação de AMBIGUOUS-001 (6 pontos)
+
+**Resposta esperada**: Ambíguo — tecnicamente um FP (código morto), mas deve ser sinalizado para remediação
+
+- **6**: Reconhece a nuance — a chamada yaml.load() está em código morto, portanto não é diretamente explorável, mas o código morto deve ser removido; recomenda limpeza em vez de aceitar/ignorar
+- **4–5**: Identifica a ambiguidade; recomenda ação
+- **2–3**: Classificado como um extremo (TP claro ou FP claro) com raciocínio razoável, porém incompleto
+- **0–1**: Classificação incorreta com justificativa fraca
+
+### 2.4 FPs Adicionais em mixed_scan_results.json (3 pontos)
+
+**FPs esperados**: FINDING-008 (comentário FIXME — INFO, sem impacto de segurança), FINDING-010 (string de debug em fixtures de teste do Flask), FINDING-013 (duplicata de FINDING-009)
+
+- **3**: Identifica pelo menos 2 FPs adicionais com justificativa
+- **2**: Identifica 1 FP adicional com justificativa
+- **1**: Tenta a identificação, mas com raciocínio fraco
+- **0**: Nenhum identificado
+
+### 2.5 Política de Falsos Positivos (3 pontos)
+
+- **3**: A política inclui critérios, requisitos de evidência, processo de aprovação e cadência de revisão
+- **2**: A política cobre a maioria dos elementos; falta um
+- **1**: Política parcial; faltam dois ou mais elementos
+- **0**: Nenhuma política submetida
+
+---
+
+## Desafio 3 — Revisão de Código Seguro (20 pontos)
+
+### 3.1 Relatório de Achados (10 pontos)
+
+**Achados mínimos esperados (8):**
+
+| Achado | Pontos |
+| ------ | ------ |
+| Injeção de SQL (login) | 1 |
+| Injeção de SQL (register) | 1 |
 | XSS (search) | 1 |
-| Command injection (ping) | 1 |
+| Injeção de comando (ping) | 1 |
 | Path traversal (file) | 1 |
-| Insecure deserialisation | 1 |
-| Hardcoded credentials / token | 1 |
-| MD5 password hashing | 1 |
-| Plain-text password storage (register) | 0.5 |
-| Debug mode + 0.0.0.0 binding | 0.5 |
-| Missing input validation (register) | 0.5 |
+| Desserialização insegura | 1 |
+| Credenciais hardcoded / token | 1 |
+| Hash de senha com MD5 | 1 |
+| Armazenamento de senha em texto puro (register) | 0,5 |
+| Modo debug + binding 0.0.0.0 | 0,5 |
+| Validação de entrada ausente (register) | 0,5 |
 
-Award up to 10 points.
+Conceder até 10 pontos.
 
-### 3.2 Dependency Review (5 points)
+### 3.2 Revisão de Dependências (5 pontos)
 
-- **5**: All 8+ vulnerable packages identified with CVEs, impact, fix versions, and reachability analysis
-- **3–4**: Most packages identified; minor gaps
-- **1–2**: Fewer than 4 packages identified
-- **0**: Not attempted
+- **5**: Todos os 8+ pacotes vulneráveis identificados com CVEs, impacto, versões corrigidas e análise de alcançabilidade
+- **3–4**: Maioria dos pacotes identificada; lacunas menores
+- **1–2**: Menos de 4 pacotes identificados
+- **0**: Não tentado
 
-### 3.3 Fixes Applied (5 points)
+### 3.3 Correções Aplicadas (5 pontos)
 
-Same as Challenge 1 — fixes evaluated holistically here if Challenge 1 was not submitted.
-
----
-
-## Challenge 4 — CI/CD Security (20 points)
-
-### 4.1 Misconfigurations Identified (10 points)
-
-**Expected misconfigurations (8+):**
-
-| Misconfiguration | Points |
-| ---------------- | ------ |
-| Hardcoded SEMGREP_APP_TOKEN in env | 1.5 |
-| Hardcoded SNYK_TOKEN in env | 1.5 |
-| DEPLOY_KEY hardcoded in step env | 2 |
-| continue-on-error: true on SAST/SCA | 1.5 |
-| \|\| true suppresses test failures | 1 |
-| No permissions block (GITHUB_TOKEN over-permissioned) | 1 |
-| Trigger on all branches (`"*"`) | 0.5 |
-| No manual approval gate before production deploy | 1 |
-| Actions not pinned to SHA | 0.5 |
-
-Award up to 10 points.
-
-### 4.2 Hardened Pipeline (7 points)
-
-- **7**: All 8 required improvements implemented; pipeline is functional
-- **5–6**: Most improvements implemented; 1–2 gaps
-- **3–4**: Core improvements (secrets, permissions, gates) implemented; others missing
-- **1–2**: Partial improvements with significant gaps
-- **0**: Not attempted
-
-### 4.3 Discussion Questions (3 points)
-
-- **3**: All three questions answered thoughtfully with specific recommendations
-- **2**: Two questions answered well
-- **1**: Superficial answers
-- **0**: Not attempted
+Mesmo critério do Desafio 1 — as correções são avaliadas holisticamente aqui, caso o Desafio 1 não tenha sido submetido.
 
 ---
 
-## Challenge 5 — JSON Parsing (15 points)
+## Desafio 4 — Segurança em CI/CD (20 pontos)
 
-### 5.1 Parser Implementation (10 points)
+### 4.1 Configurações Incorretas Identificadas (10 pontos)
 
-| Component | Points |
-| --------- | ------ |
-| `extract_field()` — handles all variant field names and nested paths | 2 |
-| `normalise_severity()` — handles all raw formats without error | 2 |
-| `normalise_finding()` — all 14 findings normalised correctly | 3 |
-| `apply_fp_rules()` — at least 3 rules implemented correctly | 2 |
-| `to_csv()` and/or `to_markdown()` — valid output format | 1 |
+**Configurações incorretas esperadas (8+):**
 
-### 5.2 Robustness (3 points)
+| Configuração Incorreta | Pontos |
+| ---------------------- | ------ |
+| SEMGREP_APP_TOKEN hardcoded em env | 1,5 |
+| SNYK_TOKEN hardcoded em env | 1,5 |
+| DEPLOY_KEY hardcoded em step env | 2 |
+| continue-on-error: true em SAST/SCA | 1,5 |
+| \|\| true suprime falhas nos testes | 1 |
+| Sem bloco de permissões (GITHUB_TOKEN com permissões excessivas) | 1 |
+| Trigger em todas as branches (`"*"`) | 0,5 |
+| Sem gate de aprovação manual antes do deploy em produção | 1 |
+| Actions não fixadas em SHA | 0,5 |
 
-- **3**: No crashes on missing/null fields, unexpected types, duplicates
-- **2**: Handles most edge cases; 1–2 crashes on edge cases
-- **1**: Basic error handling only
-- **0**: Parser crashes on multiple inputs
+Conceder até 10 pontos.
 
-### 5.3 False-Positive Classification Accuracy (2 points)
+### 4.2 Pipeline com Hardening (7 pontos)
 
-- **2**: FINDING-008, FINDING-010, and FINDING-013 correctly flagged as FP
-- **1**: 1–2 correctly flagged
-- **0**: None correctly flagged
+- **7**: Todas as 8 melhorias obrigatórias implementadas; pipeline funcional
+- **5–6**: Maioria das melhorias implementada; 1–2 lacunas
+- **3–4**: Melhorias principais (segredos, permissões, gates) implementadas; outras ausentes
+- **1–2**: Melhorias parciais com lacunas significativas
+- **0**: Não tentado
 
----
+### 4.3 Questões de Discussão (3 pontos)
 
-## Scoring Bands
-
-| Score | Band | Interpretation |
-| ----- | ---- | -------------- |
-| 90–100 | **Exceptional** | Ready for senior role; demonstrates deep expertise |
-| 75–89 | **Strong** | Solid skills; minor gaps that can be closed quickly |
-| 60–74 | **Adequate** | Meets baseline requirements; needs mentoring in some areas |
-| 45–59 | **Developing** | Foundational knowledge present; significant skill gaps |
-| < 45 | **Below Threshold** | Not suitable for a Senior IT Security Analyst role at this time |
+- **3**: Todas as três questões respondidas de forma reflexiva com recomendações específicas
+- **2**: Duas questões respondidas adequadamente
+- **1**: Respostas superficiais
+- **0**: Não tentado
 
 ---
 
-## Bonus Points (up to 10 additional points)
+## Desafio 5 — Parsing de JSON (15 pontos)
 
-| Bonus | Points |
+### 5.1 Implementação do Parser (10 pontos)
+
+| Componente | Pontos |
+| ---------- | ------ |
+| `extract_field()` — trata todos os nomes de campo variantes e caminhos aninhados | 2 |
+| `normalise_severity()` — trata todos os formatos brutos sem erros | 2 |
+| `normalise_finding()` — todos os 14 achados normalizados corretamente | 3 |
+| `apply_fp_rules()` — pelo menos 3 regras implementadas corretamente | 2 |
+| `to_csv()` e/ou `to_markdown()` — formato de saída válido | 1 |
+
+### 5.2 Robustez (3 pontos)
+
+- **3**: Sem crashes em campos ausentes/nulos, tipos inesperados ou duplicatas
+- **2**: Trata a maioria dos casos de borda; 1–2 crashes em casos extremos
+- **1**: Tratamento de erros básico apenas
+- **0**: O parser crasha em múltiplas entradas
+
+### 5.3 Precisão na Classificação de Falsos Positivos (2 pontos)
+
+- **2**: FINDING-008, FINDING-010 e FINDING-013 corretamente sinalizados como FP
+- **1**: 1–2 corretamente sinalizados
+- **0**: Nenhum corretamente sinalizado
+
+---
+
+## Faixas de Pontuação
+
+| Pontuação | Faixa | Interpretação |
+| --------- | ----- | ------------- |
+| 90–100 | **Excepcional** | Pronto para função sênior; demonstra expertise profunda |
+| 75–89 | **Forte** | Habilidades sólidas; lacunas menores que podem ser rapidamente superadas |
+| 60–74 | **Adequado** | Atende aos requisitos básicos; necessita mentoria em algumas áreas |
+| 45–59 | **Em Desenvolvimento** | Conhecimento fundamental presente; lacunas de habilidade significativas |
+| < 45 | **Abaixo do Limiar** | Não adequado para uma função de Analista Sênior de Segurança da Informação no momento |
+
+---
+
+## Pontos Bônus (até 10 pontos adicionais)
+
+| Bônus | Pontos |
 | ----- | ------ |
-| STRIDE threat model for `/login` (Challenge 3) | 3 |
-| `--filter-severity` CLI flag in parser (Challenge 5) | 1 |
-| Summary section in parser output (Challenge 5) | 1 |
-| Unit tests for parser (Challenge 5) | 2 |
-| Additional security improvements beyond required (any challenge) | up to 3 |
+| Modelo de ameaças STRIDE para `/login` (Desafio 3) | 3 |
+| Flag `--filter-severity` no parser via CLI (Desafio 5) | 1 |
+| Seção de resumo na saída do parser (Desafio 5) | 1 |
+| Testes unitários para o parser (Desafio 5) | 2 |
+| Melhorias de segurança adicionais além das obrigatórias (qualquer desafio) | até 3 |
 
 ---
 
-## Evaluator Notes
+## Notas para o Avaliador
 
-- Deduct points if fixes introduce new vulnerabilities
-- Award partial credit generously where reasoning is sound even if the
-  conclusion differs from the expected answer
-- The AMBIGUOUS-001 case has no single correct answer; evaluate the **quality
-  of reasoning**, not the classification alone
-- A candidate who correctly identifies a finding not listed in this rubric
-  should receive credit for it
+- Deduzir pontos se as correções introduzirem novas vulnerabilidades
+- Conceder crédito parcial generosamente quando o raciocínio for sólido, mesmo que a conclusão difira da resposta esperada
+- O caso AMBIGUOUS-001 não possui resposta única correta; avalie a **qualidade do raciocínio**, não apenas a classificação
+- Um candidato que identifique corretamente um achado não listado nesta rubrica deve receber crédito por isso

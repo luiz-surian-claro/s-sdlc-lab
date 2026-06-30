@@ -1,81 +1,80 @@
-# Challenge 1 — Fix Vulnerable Code (SAST Findings)
+# Desafio 1 — Corrigir Código Vulnerável (Achados de SAST)
 
-## Objective
+## Objetivo
 
-Analyse the SAST results provided in `data/sast_results.json` and fix the
-corresponding vulnerabilities in `app/app.py`.
-
----
-
-## Background
-
-You have been provided with the output of a **Semgrep** static analysis scan
-against the Flask application in `/app`. The scan identified several
-security issues across multiple OWASP Top 10 categories.
+Analise os resultados de SAST disponíveis em `data/sast_results.json` e corrija
+as vulnerabilidades correspondentes em `app/app.py`.
 
 ---
 
-## Your Tasks
+## Contexto
 
-### Task 1.1 — Triage the SAST findings
+Você recebeu a saída de uma varredura de análise estática do **Semgrep** contra
+a aplicação Flask em `/app`. A varredura identificou vários problemas de
+segurança em múltiplas categorias do OWASP Top 10.
 
-Review `data/sast_results.json` and complete the following table in your
-submission:
+---
 
-| Finding ID | Rule | Severity | CWE | File | Line | Assessment (Real / FP) | Priority |
-| ---------- | ---- | -------- | --- | ---- | ---- | ---------------------- | -------- |
+## Suas Tarefas
+
+### Tarefa 1.1 — Triagem dos achados de SAST
+
+Revise `data/sast_results.json` e preencha a tabela a seguir na sua submissão:
+
+| ID do Achado | Regra | Severidade | CWE | Arquivo | Linha | Avaliação (Real / FP) | Prioridade |
+| ------------ | ----- | ---------- | --- | ------- | ----- | --------------------- | ---------- |
 | … | … | … | … | … | … | … | … |
 
-### Task 1.2 — Fix the vulnerabilities
+### Tarefa 1.2 — Corrigir as vulnerabilidades
 
-For each **real** vulnerability you identified, implement a fix in `app/app.py`.
+Para cada vulnerabilidade **real** identificada, implemente uma correção em `app/app.py`.
 
-Minimum required fixes:
+Correções mínimas obrigatórias:
 
-1. **SQL Injection (CWE-89)** — Replace string-formatted queries with
-   parameterised queries using the `?` placeholder.
+1. **Injeção de SQL (CWE-89)** — Substitua queries com interpolação de string
+   por queries parametrizadas usando o placeholder `?`.
 
-2. **OS Command Injection (CWE-78)** — Refactor the `/ping` endpoint to avoid
-   passing user input to a shell command. Consider using `subprocess` with a
-   list of arguments and `shell=False`.
+2. **Injeção de Comando no SO (CWE-78)** — Refatore o endpoint `/ping` para evitar
+   a passagem de entrada do usuário para um comando shell. Considere usar `subprocess`
+   com uma lista de argumentos e `shell=False`.
 
-3. **Hardcoded Secrets (CWE-798)** — Move all credentials and tokens to
-   environment variables or a secrets manager. Remove them from source code.
+3. **Segredos Hardcoded (CWE-798)** — Mova todas as credenciais e tokens para
+   variáveis de ambiente ou um gerenciador de segredos. Remova-os do código-fonte.
 
-4. **Path Traversal (CWE-22)** — Validate and sanitise the `name` parameter
-   in the `/file` endpoint. Restrict access to a specific safe directory.
+4. **Path Traversal (CWE-22)** — Valide e sanitize o parâmetro `name`
+   no endpoint `/file`. Restrinja o acesso a um diretório seguro específico.
 
-5. **Insecure Deserialisation (CWE-502)** — Replace `pickle` with a safe
-   alternative such as JSON or a validated data schema.
+5. **Desserialização Insegura (CWE-502)** — Substitua `pickle` por uma
+   alternativa segura, como JSON ou um esquema de dados validado.
 
-6. **Weak Cryptography (CWE-327)** — Replace MD5 with a password-hashing
-   algorithm (e.g., `bcrypt` or `argon2`).
-
----
-
-## Deliverables
-
-- Updated `app/app.py` with all fixes applied
-- A brief write-up (`challenge_01_findings.md`) explaining:
-  - The vulnerability
-  - The impact
-  - The fix you applied
-  - The CWE and OWASP category
+6. **Criptografia Fraca (CWE-327)** — Substitua MD5 por um algoritmo de hash
+   de senhas (por exemplo, `bcrypt` ou `argon2`).
 
 ---
 
-## Evaluation Criteria
+## Entregáveis
 
-| Criterion | Weight |
-| --------- | ------ |
-| Correct identification of all vulnerabilities | 20 % |
-| Quality and completeness of fixes | 40 % |
-| Explanation of impact | 20 % |
-| Code quality of the fixed code | 20 % |
+- `app/app.py` atualizado com todas as correções aplicadas
+- Um breve relatório (`challenge_01_findings.md`) explicando:
+  - A vulnerabilidade
+  - O impacto
+  - A correção aplicada
+  - O CWE e a categoria OWASP
 
 ---
 
-## References
+## Critérios de Avaliação
+
+| Critério | Peso |
+| -------- | ---- |
+| Identificação correta de todas as vulnerabilidades | 20% |
+| Qualidade e completude das correções | 40% |
+| Explicação do impacto | 20% |
+| Qualidade do código corrigido | 20% |
+
+---
+
+## Referências
 
 - [OWASP Top 10](https://owasp.org/Top10/)
 - [CWE-89: SQL Injection](https://cwe.mitre.org/data/definitions/89.html)

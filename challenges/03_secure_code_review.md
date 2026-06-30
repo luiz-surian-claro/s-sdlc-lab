@@ -1,119 +1,118 @@
-# Challenge 3 — Secure Code Review
+# Desafio 3 — Revisão de Código Seguro
 
-## Objective
+## Objetivo
 
-Perform a thorough secure code review of `app/app.py` and `app/requirements.txt`.
-Document all findings, classify them by severity and CWE, and implement fixes.
-
----
-
-## Background
-
-Secure code review is one of the most valuable activities in a Secure SDLC.
-Unlike automated scanners, a human reviewer can:
-
-- Identify **logic flaws** that tools miss
-- Understand **context** (is the vulnerable path reachable? is input trusted?)
-- Catch **design-level** weaknesses, not just implementation bugs
-- Evaluate **defence-in-depth** and adherence to the principle of least privilege
+Realize uma revisão de código seguro completa de `app/app.py` e `app/requirements.txt`.
+Documente todos os achados, classifique-os por severidade e CWE, e implemente as correções.
 
 ---
 
-## Scope
+## Contexto
 
-| File | In Scope |
-| ---- | -------- |
-| `app/app.py` | Yes — full review |
-| `app/requirements.txt` | Yes — dependency review |
-| `ci-cd/pipeline.yml` | No — covered in Challenge 4 |
+A revisão de código seguro é uma das atividades mais valiosas em um Secure SDLC.
+Diferentemente dos scanners automatizados, um revisor humano pode:
 
----
-
-## Your Tasks
-
-### Task 3.1 — Produce a Code Review Report
-
-Examine `app/app.py` line by line. For every security issue you find, create
-an entry in your report with the following fields:
-
-| Field | Description |
-| ----- | ----------- |
-| **ID** | Unique identifier (e.g. CR-001) |
-| **File** | File name and line number |
-| **Vulnerability** | Short name (e.g. "SQL Injection") |
-| **CWE** | CWE identifier |
-| **OWASP** | OWASP Top 10 category |
-| **Severity** | Critical / High / Medium / Low / Info |
-| **Description** | Technical description of the issue |
-| **Impact** | What could an attacker achieve? |
-| **Fix** | Proposed remediation |
-
-**Minimum: report at least 8 distinct findings.**
-
-### Task 3.2 — Dependency Review
-
-Using `app/requirements.txt`, identify all dependencies with known
-vulnerabilities. For each:
-
-- State the package, version, and CVE(s)
-- Describe the vulnerability
-- State the patched version and whether it is a breaking change
-- Assess whether the vulnerability is **reachable** given the application's
-  current use of the library
-
-Tools you may use: `pip-audit`, `safety`, `snyk test`, or manual CVE research.
-
-### Task 3.3 — Implement Fixes
-
-Apply fixes for the following issues (at minimum):
-
-1. Replace all SQL injection points with parameterised queries
-2. Remove all hardcoded secrets; use `os.environ` or a secrets manager
-3. Fix the command injection in `/ping`
-4. Add input validation and path sanitisation to `/file`
-5. Replace insecure pickle deserialisation with a safe alternative
-6. Replace MD5 password hashing with bcrypt or argon2
-7. Disable debug mode; bind only to localhost in non-production environments
-
-### Task 3.4 — Threat Model (Optional Bonus)
-
-Create a brief STRIDE threat model for the `/login` endpoint. Identify at
-least one threat per STRIDE category and propose a mitigation.
+- Identificar **falhas de lógica** que as ferramentas perdem
+- Compreender o **contexto** (o caminho vulnerável é alcançável? a entrada é confiável?)
+- Detectar fraquezas de **nível de design**, não apenas bugs de implementação
+- Avaliar **defesa em profundidade** e aderência ao princípio do menor privilégio
 
 ---
 
-## Deliverables
+## Escopo
 
-- Updated `app/app.py` with all fixes applied
-- `challenge_03_code_review.md` — your review report (Tasks 3.1 and 3.2)
-- (Optional) `challenge_03_threat_model.md` — STRIDE analysis
-
----
-
-## Evaluation Criteria
-
-| Criterion | Weight |
-| --------- | ------ |
-| Number and accuracy of findings | 30 % |
-| Quality of impact analysis | 20 % |
-| Quality and completeness of fixes | 30 % |
-| Dependency review accuracy | 20 % |
+| Arquivo | No Escopo |
+| ------- | --------- |
+| `app/app.py` | Sim — revisão completa |
+| `app/requirements.txt` | Sim — revisão de dependências |
+| `ci-cd/pipeline.yml` | Não — coberto no Desafio 4 |
 
 ---
 
-## What Makes a Good Secure Code Review?
+## Suas Tarefas
 
-A strong review:
+### Tarefa 3.1 — Produzir um Relatório de Revisão de Código
 
-- Prioritises findings by **actual risk**, not just CVSS score
-- Considers the **threat model** (who is the attacker? what is their access?)
-- Goes beyond scanner output to find **logic and design flaws**
-- Proposes **practical fixes** that do not break functionality
-- Notes what the application does **well** (not all feedback is negative)
+Examine `app/app.py` linha por linha. Para cada problema de segurança encontrado,
+crie uma entrada no seu relatório com os seguintes campos:
+
+| Campo | Descrição |
+| ----- | --------- |
+| **ID** | Identificador único (ex.: CR-001) |
+| **Arquivo** | Nome do arquivo e número da linha |
+| **Vulnerabilidade** | Nome curto (ex.: "Injeção de SQL") |
+| **CWE** | Identificador CWE |
+| **OWASP** | Categoria OWASP Top 10 |
+| **Severidade** | Crítica / Alta / Média / Baixa / Info |
+| **Descrição** | Descrição técnica do problema |
+| **Impacto** | O que um atacante poderia conseguir? |
+| **Correção** | Remediação proposta |
+
+**Mínimo: reporte pelo menos 8 achados distintos.**
+
+### Tarefa 3.2 — Revisão de Dependências
+
+Usando `app/requirements.txt`, identifique todas as dependências com
+vulnerabilidades conhecidas. Para cada uma:
+
+- Informe o pacote, a versão e o(s) CVE(s)
+- Descreva a vulnerabilidade
+- Informe a versão corrigida e se é uma alteração que quebra compatibilidade
+- Avalie se a vulnerabilidade é **alcançável** dado o uso atual da biblioteca na aplicação
+
+Ferramentas que você pode usar: `pip-audit`, `safety`, `snyk test` ou pesquisa manual de CVE.
+
+### Tarefa 3.3 — Implementar Correções
+
+Aplique correções para os seguintes problemas (no mínimo):
+
+1. Substitua todos os pontos de injeção de SQL por queries parametrizadas
+2. Remova todos os segredos hardcoded; use `os.environ` ou um gerenciador de segredos
+3. Corrija a injeção de comando em `/ping`
+4. Adicione validação de entrada e sanitização de caminho em `/file`
+5. Substitua a desserialização insegura com pickle por uma alternativa segura
+6. Substitua o hash de senha MD5 por bcrypt ou argon2
+7. Desabilite o modo debug; faça o bind apenas para localhost em ambientes não produtivos
+
+### Tarefa 3.4 — Modelo de Ameaças (Bônus Opcional)
+
+Crie um breve modelo de ameaças STRIDE para o endpoint `/login`. Identifique
+pelo menos uma ameaça por categoria STRIDE e proponha uma mitigação.
 
 ---
 
-## References
+## Entregáveis
+
+- `app/app.py` atualizado com todas as correções aplicadas
+- `challenge_03_code_review.md` — seu relatório de revisão (Tarefas 3.1 e 3.2)
+- (Opcional) `challenge_03_threat_model.md` — análise STRIDE
+
+---
+
+## Critérios de Avaliação
+
+| Critério | Peso |
+| -------- | ---- |
+| Número e precisão dos achados | 30% |
+| Qualidade da análise de impacto | 20% |
+| Qualidade e completude das correções | 30% |
+| Precisão da revisão de dependências | 20% |
+
+---
+
+## O Que Torna uma Boa Revisão de Código Seguro?
+
+Uma revisão sólida:
+
+- Prioriza achados pelo **risco real**, não apenas pela pontuação CVSS
+- Considera o **modelo de ameaças** (quem é o atacante? qual é o seu acesso?)
+- Vai além da saída dos scanners para encontrar **falhas de lógica e design**
+- Propõe **correções práticas** que não comprometem a funcionalidade
+- Nota o que a aplicação faz **bem** (nem todo feedback é negativo)
+
+---
+
+## Referências
 
 - [OWASP Code Review Guide](https://owasp.org/www-project-code-review-guide/)
 - [OWASP Top 10 Proactive Controls](https://owasp.org/www-project-proactive-controls/)

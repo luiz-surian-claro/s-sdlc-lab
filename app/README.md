@@ -1,38 +1,38 @@
-# Vulnerable App — README
+# Aplicação Vulnerável — README
 
-## Overview
+## Visão Geral
 
-This is a deliberately insecure Flask application used as part of the
-**DevSecOps Security Playground** assessment.
+Esta é uma aplicação Flask deliberadamente insegura, utilizada como parte da
+avaliação **DevSecOps Security Playground**.
 
-## Running Locally
+## Executando Localmente
 
 ```bash
-# Install dependencies (use a virtual environment)
+# Instalar dependências (use um ambiente virtual)
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# Start the app
+# Iniciar a aplicação
 python app.py
 ```
 
-The application will be available at `http://localhost:5000`.
+A aplicação estará disponível em `http://localhost:5000`.
 
 ## Endpoints
 
-| Method | Path           | Description                              |
-| ------ | -------------- | ---------------------------------------- |
-| GET    | `/`            | Health check                             |
-| POST   | `/login`       | Authenticate with username/password      |
-| GET    | `/search`      | Search users by username                 |
-| GET    | `/ping`        | Ping a remote host                       |
-| POST   | `/deserialize` | Deserialise a base64-encoded payload     |
-| GET    | `/file`        | Read a file by path                      |
-| POST   | `/register`    | Register a new user                      |
+| Método | Caminho        | Descrição                                        |
+| ------ | -------------- | ------------------------------------------------ |
+| GET    | `/`            | Verificação de saúde (health check)              |
+| POST   | `/login`       | Autenticar com usuário e senha                   |
+| GET    | `/search`      | Buscar usuários por nome de usuário              |
+| GET    | `/ping`        | Pingar um host remoto                            |
+| POST   | `/deserialize` | Desserializar um payload codificado em base64    |
+| GET    | `/file`        | Ler um arquivo pelo caminho                      |
+| POST   | `/register`    | Registrar um novo usuário                        |
 
-## Assessment Notes
+## Notas da Avaliação
 
-- Examine `app.py` and `requirements.txt` for security issues.
-- Refer to `/challenges/03_secure_code_review.md` for full instructions.
-- Do **not** deploy this application in a real environment.
+- Examine `app.py` e `requirements.txt` em busca de problemas de segurança.
+- Consulte `/challenges/03_secure_code_review.md` para as instruções completas.
+- **Não** implante esta aplicação em um ambiente real.

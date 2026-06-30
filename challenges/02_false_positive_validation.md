@@ -1,100 +1,101 @@
-# Challenge 2 — False Positive Identification and Justification
+# Desafio 2 — Identificação e Justificativa de Falsos Positivos
 
-## Objective
+## Objetivo
 
-Analyse the SCA scan results in `data/sca_results.json` and the mixed scan
-results in `data/mixed_scan_results.json`. Identify false positives, justify
-your decisions, and explain the risks of misclassifying findings.
-
----
-
-## Background
-
-Security scanners generate a large volume of findings. Not all findings
-represent real, exploitable vulnerabilities. A skilled security analyst must:
-
-- Distinguish **true positives** from **false positives**
-- Understand the difference between a vulnerability in a library and a
-  vulnerability that is **reachable** in the application
-- Communicate findings clearly to developers and stakeholders
+Analise os resultados da varredura SCA em `data/sca_results.json` e os
+resultados mistos em `data/mixed_scan_results.json`. Identifique falsos positivos,
+justifique suas decisões e explique os riscos de classificar erroneamente os achados.
 
 ---
 
-## Findings Under Review
+## Contexto
 
-The `data/sca_results.json` file contains a `false_positives_candidates`
-array with three entries:
+Scanners de segurança geram um grande volume de achados. Nem todos representam
+vulnerabilidades reais e exploráveis. Um analista de segurança qualificado deve:
 
-| ID | Package | Finding | Severity Reported |
-| -- | ------- | ------- | ----------------- |
-| FP-001 | Flask 2.0.1 | Debug mode symbols in binary scan | HIGH |
-| FP-002 | requests 2.25.0 | verify=False detected | CRITICAL |
-| AMBIGUOUS-001 | PyYAML 5.3.1 | yaml.load() without Loader | CRITICAL |
-
----
-
-## Your Tasks
-
-### Task 2.1 — Classify each candidate
-
-For each of the three candidates above, provide:
-
-1. **Classification**: True Positive | False Positive | Ambiguous
-2. **Justification** (≥3 sentences): Explain your reasoning using technical
-   evidence from the scan data and the application code.
-3. **Risk of misclassification**: What happens if this finding is
-   incorrectly dismissed? Or incorrectly escalated?
-4. **Recommended action**: Fix, Accept Risk, Monitor, or No Action — and why.
-
-### Task 2.2 — Identify additional false positives
-
-Review `data/mixed_scan_results.json` and identify any findings you consider
-to be false positives beyond the labelled candidates.
-
-For each additional false positive you identify, provide the same four-point
-analysis as in Task 2.1.
-
-### Task 2.3 — Define a false-positive policy
-
-Write a brief (200–400 words) false-positive triage policy for your
-organisation. Include:
-
-- Criteria for classifying a finding as a false positive
-- Required evidence/documentation
-- Approval process (who signs off?)
-- Review cadence (how often are FP decisions re-evaluated?)
+- Distinguir **verdadeiros positivos** de **falsos positivos**
+- Entender a diferença entre uma vulnerabilidade em uma biblioteca e uma
+  vulnerabilidade que é **alcançável** na aplicação
+- Comunicar os achados de forma clara a desenvolvedores e partes interessadas
 
 ---
 
-## Deliverables
+## Achados em Revisão
 
-- A Markdown file `challenge_02_false_positives.md` with your analysis
+O arquivo `data/sca_results.json` contém um array `false_positives_candidates`
+com três entradas:
 
----
-
-## Evaluation Criteria
-
-| Criterion | Weight |
-| --------- | ------ |
-| Correct classification of FP-001 and FP-002 (obvious FPs) | 20 % |
-| Nuanced analysis of AMBIGUOUS-001 | 25 % |
-| Additional FPs identified in mixed results | 25 % |
-| Quality of the false-positive policy | 30 % |
+| ID | Pacote | Achado | Severidade Reportada |
+| -- | ------ | ------ | -------------------- |
+| FP-001 | Flask 2.0.1 | Símbolos de modo debug em varredura binária | ALTA |
+| FP-002 | requests 2.25.0 | verify=False detectado | CRÍTICA |
+| AMBIGUOUS-001 | PyYAML 5.3.1 | yaml.load() sem Loader | CRÍTICA |
 
 ---
 
-## Hints
+## Suas Tarefas
 
-- Read the `analyst_note` fields — they contain context but not the answer.
-- Think about **reachability**: a vulnerable code path that is never called
-  is different from one that is directly exposed.
-- Think about **scanner limitations**: pattern-matching tools have
-  well-known sources of noise.
-- Consider the **business impact** of both under-reporting and over-reporting.
+### Tarefa 2.1 — Classificar cada candidato
+
+Para cada um dos três candidatos acima, forneça:
+
+1. **Classificação**: Verdadeiro Positivo | Falso Positivo | Ambíguo
+2. **Justificativa** (≥3 frases): Explique seu raciocínio com evidências técnicas
+   dos dados da varredura e do código da aplicação.
+3. **Risco de classificação incorreta**: O que acontece se esse achado for
+   descartado incorretamente? Ou incorretamente escalado?
+4. **Ação recomendada**: Corrigir, Aceitar Risco, Monitorar ou Sem Ação — e por quê.
+
+### Tarefa 2.2 — Identificar falsos positivos adicionais
+
+Revise `data/mixed_scan_results.json` e identifique quaisquer achados que você
+considere falsos positivos além dos candidatos rotulados.
+
+Para cada falso positivo adicional identificado, forneça a mesma análise de
+quatro pontos da Tarefa 2.1.
+
+### Tarefa 2.3 — Definir uma política de falsos positivos
+
+Escreva uma política de triagem de falsos positivos breve (200–400 palavras)
+para sua organização. Inclua:
+
+- Critérios para classificar um achado como falso positivo
+- Evidências/documentação necessárias
+- Processo de aprovação (quem assina?)
+- Cadência de revisão (com que frequência as decisões de FP são reavaliadas?)
 
 ---
 
-## References
+## Entregáveis
+
+- Um arquivo Markdown `challenge_02_false_positives.md` com sua análise
+
+---
+
+## Critérios de Avaliação
+
+| Critério | Peso |
+| -------- | ---- |
+| Classificação correta de FP-001 e FP-002 (FPs óbvios) | 20% |
+| Análise refinada de AMBIGUOUS-001 | 25% |
+| FPs adicionais identificados nos resultados mistos | 25% |
+| Qualidade da política de falsos positivos | 30% |
+
+---
+
+## Dicas
+
+- Leia os campos `analyst_note` — eles contêm contexto, mas não a resposta.
+- Pense em **alcançabilidade**: um caminho de código vulnerável que nunca é
+  chamado é diferente de um que está diretamente exposto.
+- Pense nas **limitações do scanner**: ferramentas de correspondência de padrões
+  têm fontes de ruído bem conhecidas.
+- Considere o **impacto nos negócios** tanto de sub-reportar quanto de
+  super-reportar.
+
+---
+
+## Referências
 
 - [OWASP False Positives](https://owasp.org/www-community/vulnerabilities/False_Positives)
 - [CVE-2020-14343 (PyYAML)](https://nvd.nist.gov/vuln/detail/CVE-2020-14343)

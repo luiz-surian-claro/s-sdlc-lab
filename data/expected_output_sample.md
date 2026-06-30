@@ -1,35 +1,35 @@
-# Sample Expected Output — vulnerability_parser.py
+# Saída Esperada de Exemplo — vulnerability_parser.py
 
-This file shows a **reference output** from a complete implementation of
-`scripts/vulnerability_parser.py` against `data/mixed_scan_results.json`.
+Este arquivo mostra uma **saída de referência** de uma implementação completa de
+`scripts/vulnerability_parser.py` contra `data/mixed_scan_results.json`.
 
-Use this to validate your parser's output. Minor differences in wording are
-acceptable; the classification and normalised fields should match.
+Use este arquivo para validar a saída do seu parser. Pequenas diferenças de
+redação são aceitáveis; a classificação e os campos normalizados devem corresponder.
 
 ---
 
-## Markdown Report
+## Relatório em Markdown
 
 ```markdown
-## Vulnerability Report
+## Relatório de Vulnerabilidades
 
-Generated: 2024-11-15
-Input: data/mixed_scan_results.json
-Total findings: 14 | True Positives: 10 | False Positives: 4
+Gerado em: 2024-11-15
+Entrada: data/mixed_scan_results.json
+Total de achados: 14 | Verdadeiros Positivos: 10 | Falsos Positivos: 4
 
-### Summary
+### Resumo
 
-| Severity | Count (TP) |
-| -------- | ---------- |
-| critical | 2 |
-| high     | 4 |
-| medium   | 3 |
-| low      | 1 |
-| info     | 2 (FP) |
+| Severidade | Contagem (VP) |
+| ---------- | ------------- |
+| critical   | 2 |
+| high       | 4 |
+| medium     | 3 |
+| low        | 1 |
+| info       | 2 (FP) |
 
 ---
 
-### Findings
+### Achados
 
 | ID | Tool | Severity | CWE | File | Line | Description | FP |
 | -- | ---- | -------- | --- | ---- | ---- | ----------- | -- |
@@ -51,7 +51,7 @@ Total findings: 14 | True Positives: 10 | False Positives: 4
 
 ---
 
-## CSV Report
+## Relatório CSV
 
 ```csv
 id,tool,severity,cwe,file,line,description,false_positive
@@ -73,13 +73,13 @@ FINDING-014,semgrep,high,CWE-22,app/app.py,121,Path traversal — open() called 
 
 ---
 
-## Notes
+## Notas
 
-- **FINDING-008** → FP: Informational FIXME comment; no security impact.
-- **FINDING-010** → FP: The scanner matched Flask's own test fixtures
-  (a "debug" string in library code), not user-code misconfiguration.
-- **FINDING-013** → FP / Duplicate: Same CVE and package as FINDING-009;
-  only one should appear in a de-duplicated report.
-- **FINDING-011** → True Positive: Debug mode is set in `app.py` line 36 via
-  `app.config["DEBUG"] = True`. Although the severity is INFO, it is a real
-  finding in user code.
+- **FINDING-008** → FP: Comentário FIXME informacional; sem impacto de segurança.
+- **FINDING-010** → FP: O scanner detectou as próprias fixtures de teste do Flask
+  (uma string "debug" no código da biblioteca), não uma configuração incorreta no código do usuário.
+- **FINDING-013** → FP / Duplicata: Mesmo CVE e pacote que FINDING-009;
+  apenas um deve aparecer em um relatório sem duplicatas.
+- **FINDING-011** → Verdadeiro Positivo: O modo Debug está definido em `app.py` linha 36 via
+  `app.config["DEBUG"] = True`. Embora a severidade seja INFO, é um achado real
+  no código do usuário.
