@@ -2,18 +2,15 @@
 # -----------------------------------------------
 # TODO (CANDIDATO): Revise esta configuração de pipeline.
 # Identifique todas as configurações incorretas de segurança e proponha correções.
-# Consulte /challenges/04_cicd_security.md para as instruções completas.
 
 name: Pipeline CI Vulnerável
 
 on:
   push:
-    branches: ["*"]   # TODO (CANDIDATO): Fazer trigger em todas as branches é apropriado?
+    branches: ["*"]
   pull_request:
     branches: ["*"]
 
-# CONFIGURAÇÃO INCORRETA: Sem bloco de permissões no nível superior — os jobs herdam GITHUB_TOKEN
-# com permissões de escrita para todos os escopos por padrão.
 
 jobs:
   # ------------------------------------------------------------------
@@ -34,15 +31,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r app/requirements.txt
 
-      # CONFIGURAÇÃO INCORRETA: Instalação de dependências sem verificação de integridade
-      # (sem hash pinning em requirements, sem flag --require-hashes)
-
       - name: Executar testes unitários
         run: |
           cd app
           python -m pytest tests/ || true
-        # CONFIGURAÇÃO INCORRETA: '|| true' suprime falhas nos testes — o pipeline
-        # continua mesmo quando os testes falham.
 
   # ------------------------------------------------------------------
   # Estágio 2 — SAST (Teste de Segurança de Aplicação Estático)
@@ -52,7 +44,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     env:
-      # CONFIGURAÇÃO INCORRETA: Segredo hardcoded como valor de variável de ambiente
       SEMGREP_APP_TOKEN: "hardcoded-semgrep-token-abc123"
     steps:
       - name: Checkout code
@@ -62,8 +53,6 @@ jobs:
         uses: semgrep/semgrep-action@v1
         with:
           config: "p/python"
-        # CONFIGURAÇÃO INCORRETA: Sem limiar de falha definido — os achados não fazem
-        # o pipeline falhar independentemente da severidade.
         continue-on-error: true
 
       - name: Upload SAST results
@@ -87,13 +76,9 @@ jobs:
       - name: Run Snyk
         uses: snyk/actions/python@master
         env:
-          # CONFIGURAÇÃO INCORRETA: Token lido de variável de ambiente hardcoded em vez
-          # de um secret do repositório.
           SNYK_TOKEN: "hardcoded-snyk-token-abc123"
         with:
           args: --severity-threshold=low
-        # CONFIGURAÇÃO INCORRETA: 'continue-on-error: true' — vulnerabilidades nunca
-        # bloqueiam o pipeline.
         continue-on-error: true
 
   # ------------------------------------------------------------------
@@ -112,15 +97,11 @@ jobs:
           pip install -r app/requirements.txt
           python app/app.py &
           sleep 5
-        # CONFIGURAÇÃO INCORRETA: App iniciada em um runner público com debug=True
-        # e binding em 0.0.0.0 (definido em app.py).
 
       - name: Run ZAP baseline scan
         uses: zaproxy/action-baseline@v0.10.0
         with:
           target: "http://localhost:5000"
-          # CONFIGURAÇÃO INCORRETA: Sem fail_action configurado — alertas nunca
-          # bloqueiam o pipeline.
           fail_action: false
 
       - name: Upload ZAP report
@@ -137,22 +118,15 @@ jobs:
     name: Deploy para Produção
     runs-on: ubuntu-latest
     needs: [sast, sca, dast]
-    # CONFIGURAÇÃO INCORRETA: Sem regras de proteção de ambiente, sem revisores obrigatórios
-    # e sem gate de aprovação manual antes do deploy em produção.
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Deploy application
         env:
-          # CONFIGURAÇÃO INCORRETA: Credenciais de produção embutidas diretamente no
-          # workflow em vez de usar GitHub Secrets.
           DATABASE_URL: "******prod-db.example.com/appdb"
           DEPLOY_KEY: "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA..."
         run: |
           echo "Fazendo deploy em produção..."
           # script de deploy seria inserido aqui
           echo "Deploy concluído!"
-
-      # CONFIGURAÇÃO INCORRETA: Sem etapa de verificação pós-deploy
-      # (ex.: smoke test, re-execução do DAST contra a URL de produção).
