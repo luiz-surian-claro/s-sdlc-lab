@@ -1,0 +1,615 @@
+{
+  "info": {
+    "_postman_id": "6930721c-62ba-44f5-a0ce-3494c2922cc6",
+    "name": "S-SDLC Lab",
+    "description": "Aplicação Flask deliberadamente insegura, utilizada como parte da avaliação **Playground de Segurança DevSecOps.**",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46120368"
+  },
+  "item": [
+    {
+      "name": "Index / Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}",
+          "host": [
+            "{{host}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Hello World",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}",
+              "host": [
+                "{{host}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "75"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:24:16 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Bem-vindo à Aplicação Vulnerável\",\n    \"status\": \"ok\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "{{user}}",
+              "type": "text",
+              "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+            },
+            {
+              "key": "password",
+              "value": "{{pwd}}",
+              "type": "text",
+              "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/login",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Bem vinda, alice",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{user}}",
+                  "type": "text",
+                  "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+                },
+                {
+                  "key": "password",
+                  "value": "{{pwd}}",
+                  "type": "text",
+                  "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "45"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:23:35 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"role\": \"user\",\n    \"status\": \"success\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Buscar Usuário",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "alice",
+              "type": "text",
+              "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+            },
+            {
+              "key": "password",
+              "value": "alice123",
+              "type": "text",
+              "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/search?username={{user}}",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "search"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "{{user}}"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Who is alice?",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "alice",
+                  "type": "text",
+                  "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+                },
+                {
+                  "key": "password",
+                  "value": "alice123",
+                  "type": "text",
+                  "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/search?username={{user}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "{{user}}"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "225"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:23:17 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "    \n<html>\n    <body>\n        <h1>Resultados da Busca</h1>\n        <p>Resultados para: alice</p>\n        <p>Nome de usuário: alice</p>\n        <p>Função: user</p>\n    </body>\n</html>"
+        }
+      ]
+    },
+    {
+      "name": "Ping",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/ping?host=127.0.0.1",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "ping"
+          ],
+          "query": [
+            {
+              "key": "host",
+              "value": "127.0.0.1",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Localhost",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/ping?host=127.0.0.1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "ping"
+              ],
+              "query": [
+                {
+                  "key": "host",
+                  "value": "127.0.0.1"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "349"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:22:53 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"output\": \"\\nDisparando 127.0.0.1 com 32 bytes de dados:\\nResposta de 127.0.0.1: bytes=32 tempo<1ms TTL=128\\n\\nEstat¡sticas do Ping para 127.0.0.1:\\n    Pacotes: Enviados = 1, Recebidos = 1, Perdidos = 0 (0% de\\n             perda),\\nAproximar um n£mero redondo de vezes em milissegundos:\\n    M¡nimo = 0ms, M ximo = 0ms, M‚dia = 0ms\\n\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Desserializa base64",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "data",
+              "value": "gASVpAEAAAAAAAB9lCiMB3VzdWFyaW+UfZQojAJpZJRLKowEbm9tZZSMDkNhcmxvcyBFZHVhcmRvlIwIdXNlcm5hbWWUjA5jYXJsb3MuZWR1YXJkb5SMBWVtYWlslIwdY2FybG9zLmVkdWFyZG9AZW1wcmVzYS5jb20uYnKUjAZwZXJmaWyUjAhhbmFsaXN0YZSMBWF0aXZvlIh1jAZzZXNzYW+UfZQojAV0b2tlbpSMLGV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leGVtcGxvlIwJY3JpYWRvX2VtlIwTMjAyNi0wNi0zMFQxMDowMDowMJSMCWV4cGlyYV9lbZSMEzIwMjYtMDYtMzBUMTg6MDA6MDCUdYwKcGVybWlzc29lc5RdlCiMB2xlaXR1cmGUjAdlc2NyaXRhlIwKcmVsYXRvcmlvc5RljAhtZXRhZGF0YZR9lCiMCWlwX29yaWdlbZSMDTE5Mi4xNjguMS4xMDCUjAZhZ2VudGWUjAtNb3ppbGxhLzUuMJSMEHRlbnRhdGl2YXNfbG9naW6USwF1dS4=",
+              "type": "text",
+              "uuid": "6cbd9a3d-72ec-4361-9a49-6a9a5c151b28"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/deserialize",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "deserialize"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Mock",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "data",
+                  "value": "gASVpAEAAAAAAAB9lCiMB3VzdWFyaW+UfZQojAJpZJRLKowEbm9tZZSMDkNhcmxvcyBFZHVhcmRvlIwIdXNlcm5hbWWUjA5jYXJsb3MuZWR1YXJkb5SMBWVtYWlslIwdY2FybG9zLmVkdWFyZG9AZW1wcmVzYS5jb20uYnKUjAZwZXJmaWyUjAhhbmFsaXN0YZSMBWF0aXZvlIh1jAZzZXNzYW+UfZQojAV0b2tlbpSMLGV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leGVtcGxvlIwJY3JpYWRvX2VtlIwTMjAyNi0wNi0zMFQxMDowMDowMJSMCWV4cGlyYV9lbZSMEzIwMjYtMDYtMzBUMTg6MDA6MDCUdYwKcGVybWlzc29lc5RdlCiMB2xlaXR1cmGUjAdlc2NyaXRhlIwKcmVsYXRvcmlvc5RljAhtZXRhZGF0YZR9lCiMCWlwX29yaWdlbZSMDTE5Mi4xNjguMS4xMDCUjAZhZ2VudGWUjAtNb3ppbGxhLzUuMJSMEHRlbnRhdGl2YXNfbG9naW6USwF1dS4=",
+                  "type": "text",
+                  "uuid": "6cbd9a3d-72ec-4361-9a49-6a9a5c151b28"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/deserialize",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "deserialize"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "462"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:22:18 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"result\": \"{'usuario': {'id': 42, 'nome': 'Carlos Eduardo', 'username': 'carlos.eduardo', 'email': 'carlos.eduardo@empresa.com.br', 'perfil': 'analista', 'ativo': True}, 'sessao': {'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.exemplo', 'criado_em': '2026-06-30T10:00:00', 'expira_em': '2026-06-30T18:00:00'}, 'permissoes': ['leitura', 'escrita', 'relatorios'], 'metadata': {'ip_origem': '192.168.1.100', 'agente': 'Mozilla/5.0', 'tentativas_login': 1}}\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Leitura de Arquivos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/file?name=README.MD",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "file"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "README.MD"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "README.MD",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/file?name=README.MD",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "file"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "README.MD"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1481"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:15:40 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"content\": \"# AplicaÃ§Ã£o VulnerÃ¡vel â€” README\\n\\n## VisÃ£o Geral\\n\\nEsta Ã© uma aplicaÃ§Ã£o Flask deliberadamente insegura, utilizada como parte da\\navaliaÃ§Ã£o **Playground de SeguranÃ§a DevSecOps**.\\n\\n## Executando Localmente\\n\\n```bash\\n# Instalar dependÃªncias (use um ambiente virtual)\\npython -m venv venv\\nsource venv/bin/activate\\npip install -r requirements.txt\\n\\n# Iniciar a aplicaÃ§Ã£o\\npython app.py\\n```\\n\\nA aplicaÃ§Ã£o estarÃ¡ disponÃ\\u00advel em `http://localhost:5000`.\\n\\n## Endpoints\\n\\n| MÃ©todo | Caminho        | DescriÃ§Ã£o                                        |\\n| ------ | -------------- | ------------------------------------------------ |\\n| GET    | `/`            | VerificaÃ§Ã£o de saÃºde (health check)              |\\n| POST   | `/login`       | Autenticar com usuÃ¡rio e senha                   |\\n| GET    | `/search`      | Buscar usuÃ¡rios por nome de usuÃ¡rio              |\\n| GET    | `/ping`        | Pingar um host remoto                            |\\n| POST   | `/deserialize` | Desserializar um payload codificado em base64    |\\n| GET    | `/file`        | Ler um arquivo pelo caminho                      |\\n| POST   | `/register`    | Registrar um novo usuÃ¡rio                        |\\n\\n## Notas da AvaliaÃ§Ã£o\\n\\n- Examine `app.py` e `requirements.txt` em busca de problemas de seguranÃ§a.\\n- **NÃ£o** implante esta aplicaÃ§Ã£o em um ambiente real.\\n\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Registrar Usuário",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "bob",
+              "type": "text",
+              "uuid": "baa4f057-fcac-42d8-b2d6-1409aceda451"
+            },
+            {
+              "key": "password",
+              "value": "bob123",
+              "type": "text",
+              "uuid": "d97c60ba-b80a-42a8-87ca-b1b7c9da89d7"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/register",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "register"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Bem vindo, bob",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "bob",
+                  "type": "text",
+                  "uuid": "baa4f057-fcac-42d8-b2d6-1409aceda451"
+                },
+                {
+                  "key": "password",
+                  "value": "bob123",
+                  "type": "text",
+                  "uuid": "d97c60ba-b80a-42a8-87ca-b1b7c9da89d7"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/register",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "29"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:20:46 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"registrado\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "user",
+      "value": "alice"
+    },
+    {
+      "key": "pwd",
+      "value": "alice123"
+    }
+  ]
+}

@@ -6,11 +6,7 @@ para fins de avaliação.
 
 NOTA AO CANDIDATO:
   Seu objetivo é identificar, classificar e corrigir os problemas de segurança
-  presentes neste arquivo. NÃO use esta aplicação em produção.
-
-Vulnerabilidades deliberadamente introduzidas (não leia à frente se quiser uma
-experiência de avaliação limpa):
-  - Consulte /challenges/03_secure_code_review.md para as instruções.
+  presentes neste arquivo. NÃO use esta aplicação em ambientes produtivos.
 """
 
 import sqlite3
@@ -18,26 +14,27 @@ import subprocess
 import pickle
 import base64
 import hashlib
+import platform
 
 from flask import Flask, request, jsonify, render_template_string
 
 app = Flask(__name__)
 
 # ------------------------------------------------------------------ #
-# Configuração                                                          #
+# Configuração                                                       #
 # ------------------------------------------------------------------ #
 
-# TODO (CANDIDATO): Há algum problema na forma como os segredos são tratados aqui?
 SECRET_KEY = "supersecretkey123"
 DB_PASSWORD = "admin1234"
-API_TOKEN = "ghp_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  # noqa: S105
+API_TOKEN = "ghp_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 
 app.config["SECRET_KEY"] = SECRET_KEY
-app.config["DEBUG"] = True  # TODO (CANDIDATO): O modo DEBUG é seguro para produção?
+app.config["DEBUG"] = True
+app.config["JSON_AS_ASCII"] = False
 
 
 # ------------------------------------------------------------------ #
-# Helpers de banco de dados                                             #
+# Helpers de banco de dados                                          #
 # ------------------------------------------------------------------ #
 
 def get_db_connection():
@@ -58,9 +55,8 @@ def init_db():
             role TEXT DEFAULT 'user'
         )"""
     )
-    # Popula um usuário admin padrão — senha armazenada como MD5 puro
-    # TODO (CANDIDATO): O que há de errado nessa abordagem de armazenamento de senha?
-    hashed = hashlib.md5(b"password123").hexdigest()  # noqa: S324
+
+    hashed = hashlib.md5(b"password123").hexdigest()
     conn.execute(
         "INSERT OR IGNORE INTO users (id, username, password, role) VALUES (1, 'admin', ?, 'admin')",
         (hashed,),
@@ -73,7 +69,7 @@ def init_db():
 
 
 # ------------------------------------------------------------------ #
-# Rotas                                                                 #
+# Rotas                                                              #
 # ------------------------------------------------------------------ #
 
 @app.route("/")
@@ -85,15 +81,11 @@ def index():
 def login():
     """
     Autentica um usuário por nome de usuário e senha.
-
-    TODO (CANDIDATO): Identifique a vulnerabilidade nesta query e corrija-a.
-    Dica: Pense em CWE-89.
     """
     username = request.form.get("username", "")
     password = request.form.get("password", "")
 
     conn = get_db_connection()
-    # VULNERABILIDADE: Injeção de SQL — a entrada do usuário é interpolada diretamente na query
     query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
     user = conn.execute(query).fetchone()
     conn.close()
@@ -107,36 +99,41 @@ def login():
 def search():
     """
     Busca um usuário por nome de usuário.
-
-    TODO (CANDIDATO): Este endpoint é vulnerável? Se sim, como?
-    Dica: Pense em CWE-79.
     """
     username = request.args.get("username", "")
 
-    # VULNERABILIDADE: XSS refletido — entrada não sanitizada renderizada diretamente no HTML
+    conn = get_db_connection()
+    user = conn.execute(
+        "SELECT username, role FROM users WHERE username = ?", (username,)
+    ).fetchone()
+    conn.close()
+
     template = f"""
     <html>
       <body>
         <h1>Resultados da Busca</h1>
         <p>Resultados para: {username}</p>
+        {{% if user %}}
+            <p>Nome de usuário: {{{{ user['username'] }}}}</p>
+            <p>Função: {{{{ user['role'] }}}}</p>
+        {{% else %}}
+            <p>Nenhum usuário encontrado.</p>
+        {{% endif %}}
       </body>
     </html>
     """
-    return render_template_string(template)
+    return render_template_string(template, user=user)
 
 
 @app.route("/ping")
 def ping():
     """
     Faz ping em um host para verificar conectividade.
-
-    TODO (CANDIDATO): Que vulnerabilidade existe aqui? Como você a corrigiria?
-    Dica: Pense em CWE-78.
     """
     host = request.args.get("host", "127.0.0.1")
 
-    # VULNERABILIDADE: Injeção de comando no SO — entrada controlada pelo usuário passada ao shell
-    result = subprocess.check_output(f"ping -c 1 {host}", shell=True, text=True)  # noqa: S602
+    flag = "-n" if platform.system() == "Windows" else "-c"
+    result = subprocess.check_output(f"ping {flag} 1 {host}", shell=True, text=True)
     return jsonify({"output": result})
 
 
@@ -145,13 +142,12 @@ def deserialize():
     """
     Desserializa um payload codificado em base64 fornecido pelo cliente.
 
-    TODO (CANDIDATO): Por que desserializar entrada arbitrária do usuário é perigoso?
-    Dica: Pense em CWE-502.
+    Exemplo de payload legítimo (base64 + pickle):
+    gASVSQAAAAAAAAB9lCiMBWhlbGxvlIwFd29ybGSUjAZudW1iZXKUSyqMBGxpc3SUXZQoSwFLAksDZYwEZGljdJR9lIwDa2V5lIwFdmFsdWWUc3Uu
     """
     data = request.form.get("data", "")
 
-    # VULNERABILIDADE: Desserialização insegura de dados não confiáveis
-    obj = pickle.loads(base64.b64decode(data))  # noqa: S301
+    obj = pickle.loads(base64.b64decode(data))
     return jsonify({"result": str(obj)})
 
 
@@ -159,14 +155,10 @@ def deserialize():
 def read_file():
     """
     Retorna o conteúdo de um arquivo pelo caminho.
-
-    TODO (CANDIDATO): Que vulnerabilidade existe aqui? Qual é o impacto?
-    Dica: Pense em CWE-22.
     """
     filename = request.args.get("name", "")
 
-    # VULNERABILIDADE: Path traversal — sem sanitização do parâmetro de nome de arquivo
-    with open(filename, "r") as f:  # noqa: PTH123
+    with open(filename, "r") as f:
         content = f.read()
     return jsonify({"content": content})
 
@@ -175,17 +167,13 @@ def read_file():
 def register():
     """
     Registra um novo usuário.
-
-    TODO (CANDIDATO): Identifique todos os problemas de segurança neste endpoint.
     """
     username = request.form.get("username", "")
     password = request.form.get("password", "")
 
-    # VULNERABILIDADE: Sem validação de entrada — qualquer comprimento/conjunto de caracteres aceito
-    # VULNERABILIDADE: Senha armazenada em texto puro (sem hash algum)
     conn = get_db_connection()
     conn.execute(
-        f"INSERT INTO users (username, password) VALUES ('{username}', '{password}')"  # noqa: S608
+        f"INSERT INTO users (username, password) VALUES ('{username}', '{password}')"
     )
     conn.commit()
     conn.close()
@@ -193,10 +181,9 @@ def register():
 
 
 # ------------------------------------------------------------------ #
-# Ponto de entrada                                                      #
+# Entrypoint                                                         #
 # ------------------------------------------------------------------ #
 
 if __name__ == "__main__":
     init_db()
-    # VULNERABILIDADE: Executando com debug=True e binding em todas as interfaces
-    app.run(host="0.0.0.0", port=5000, debug=True)  # noqa: S104
+    app.run(host="0.0.0.0", port=5000, debug=True)

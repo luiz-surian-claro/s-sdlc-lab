@@ -3,7 +3,7 @@
 ## Visão Geral
 
 Esta é uma aplicação Flask deliberadamente insegura, utilizada como parte da
-avaliação **DevSecOps Security Playground**.
+avaliação **Playground de Segurança DevSecOps**.
 
 ## Executando Localmente
 
@@ -34,5 +34,4 @@ A aplicação estará disponível em `http://localhost:5000`.
 ## Notas da Avaliação
 
 - Examine `app.py` e `requirements.txt` em busca de problemas de segurança.
-- Consulte `/challenges/03_secure_code_review.md` para as instruções completas.
 - **Não** implante esta aplicação em um ambiente real.

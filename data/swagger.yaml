@@ -1,0 +1,256 @@
+openapi: 3.0.3
+info:
+  title: S-SDLC Lab — Aplicação Vulnerável
+  description: |
+    API da aplicação Flask vulnerável utilizada como playground de segurança DevSecOps.
+
+    > ⚠️ **Atenção:** Esta aplicação contém vulnerabilidades intencionais para fins de avaliação.
+    > NÃO utilize em ambientes produtivos.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Servidor de desenvolvimento local
+
+tags:
+  - name: Geral
+    description: Endpoints gerais
+  - name: Autenticação
+    description: Registro e autenticação de usuários
+  - name: Usuários
+    description: Operações sobre usuários
+  - name: Utilitários
+    description: Ferramentas utilitárias
+  - name: Debug
+    description: Endpoints de depuração
+
+paths:
+
+  /:
+    get:
+      summary: Health check
+      description: Retorna o status da aplicação.
+      tags:
+        - Geral
+      responses:
+        "200":
+          description: Aplicação em execução
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  message:
+                    type: string
+                    example: Bem-vindo à Aplicação Vulnerável
+
+  /login:
+    post:
+      summary: Autenticar usuário
+      description: |
+        Autentica um usuário por nome de usuário e senha via form data.
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: admin
+                password:
+                  type: string
+                  format: password
+                  example: password123
+      responses:
+        "200":
+          description: Autenticação bem-sucedida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  role:
+                    type: string
+                    example: admin
+        "401":
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /register:
+    post:
+      summary: Registrar novo usuário
+      description: |
+        Cria um novo usuário com nome de usuário e senha.
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: novo_usuario
+                password:
+                  type: string
+                  format: password
+                  example: minha_senha
+      responses:
+        "200":
+          description: Usuário registrado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: registrado
+
+  /search:
+    get:
+      summary: Buscar usuário
+      description: |
+        Busca um usuário pelo nome de usuário e retorna uma página HTML com o resultado.
+      tags:
+        - Usuários
+      parameters:
+        - name: username
+          in: query
+          required: false
+          description: Nome de usuário a ser buscado
+          schema:
+            type: string
+            example: admin
+      responses:
+        "200":
+          description: Página HTML com resultados da busca
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /ping:
+    get:
+      summary: Verificar conectividade com host
+      description: |
+        Executa um comando `ping` no host informado e retorna a saída.
+      tags:
+        - Utilitários
+      parameters:
+        - name: host
+          in: query
+          required: false
+          description: Endereço IP ou hostname para fazer ping
+          schema:
+            type: string
+            default: "127.0.0.1"
+            example: "8.8.8.8"
+      responses:
+        "200":
+          description: Saída do comando ping
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  output:
+                    type: string
+                    example: "PING 8.8.8.8 (8.8.8.8): 56 data bytes\n64 bytes from 8.8.8.8..."
+
+  /file:
+    get:
+      summary: Ler conteúdo de arquivo
+      description: |
+        Retorna o conteúdo de um arquivo pelo caminho informado.
+      tags:
+        - Debug
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: Caminho do arquivo a ser lido
+          schema:
+            type: string
+            example: "README.md"
+      responses:
+        "200":
+          description: Conteúdo do arquivo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    example: "# S-SDLC Lab\n..."
+
+  /deserialize:
+    post:
+      summary: Desserializar payload pickle
+      description: |
+        Recebe um payload codificado em Base64 (formato pickle do Python) e o desserializa.
+
+        **Exemplo de payload legítimo (Base64 + pickle):**
+        ```
+        gASVSQAAAAAAAAB9lCiMBWhlbGxvlIwFd29ybGSUjAZudW1iZXKUSyqMBGxpc3SUXZQoSwFLAksDZYwEZGljdJR9lIwDa2V5lIwFdmFsdWWUc3Uu
+        ```
+      tags:
+        - Debug
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: string
+                  description: Payload serializado com pickle, codificado em Base64
+                  example: "gASVSQAAAAAAAAB9lCiMBWhlbGxvlIwFd29ybGSUjAZudW1iZXKUSyqMBGxpc3SUXZQoSwFLAksDZYwEZGljdJR9lIwDa2V5lIwFdmFsdWWUc3Uu"
+      responses:
+        "200":
+          description: Resultado da desserialização
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: "{'hello': 'world', 'number': 42, 'list': [1, 2, 3], 'dict': {'key': 'value'}}"
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          example: failure
+        message:
+          type: string
+          example: Credenciais inválidas
