@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     env:
-      SEMGREP_APP_TOKEN: "hardcoded-semgrep-token-abc123"
+      SEMGREP_APP_TOKEN: "semgrep-token-abc123"
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -76,7 +76,7 @@ jobs:
       - name: Run Snyk
         uses: snyk/actions/python@master
         env:
-          SNYK_TOKEN: "hardcoded-snyk-token-abc123"
+          SNYK_TOKEN: "snyk-token-abc123"
         with:
           args: --severity-threshold=low
         continue-on-error: true
