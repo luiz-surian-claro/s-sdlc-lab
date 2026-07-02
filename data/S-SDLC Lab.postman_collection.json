@@ -165,20 +165,7 @@
         "header": [],
         "body": {
           "mode": "urlencoded",
-          "urlencoded": [
-            {
-              "key": "username",
-              "value": "alice",
-              "type": "text",
-              "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
-            },
-            {
-              "key": "password",
-              "value": "alice123",
-              "type": "text",
-              "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
-            }
-          ]
+          "urlencoded": []
         },
         "url": {
           "raw": "{{host}}/search?username={{user}}",
@@ -204,20 +191,7 @@
             "header": [],
             "body": {
               "mode": "urlencoded",
-              "urlencoded": [
-                {
-                  "key": "username",
-                  "value": "alice",
-                  "type": "text",
-                  "uuid": "0db51b8d-cd6f-4e44-9deb-099992e8ef56"
-                },
-                {
-                  "key": "password",
-                  "value": "alice123",
-                  "type": "text",
-                  "uuid": "a26c31ed-420d-4252-ad69-c7e90ae597e9"
-                }
-              ]
+              "urlencoded": []
             },
             "url": {
               "raw": "{{host}}/search?username={{user}}",
@@ -253,7 +227,7 @@
             },
             {
               "key": "Date",
-              "value": "Wed, 01 Jul 2026 01:23:17 GMT"
+              "value": "Thu, 02 Jul 2026 13:38:18 GMT"
             }
           ],
           "cookie": [],
